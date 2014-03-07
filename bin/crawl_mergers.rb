@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+
 require 'anemone'
+require 'cma/oft/mergers/case_list'
 
 CASE_INDEX        = %r{/OFTwork/mergers/Mergers_Cases/?$}
 CASE              = %r{/OFTwork/mergers/Mergers_Cases/20[0-9]{2}/[a-z|A-Z|0-9]+}
@@ -11,7 +14,7 @@ ASSET             = %r{\.pdf$}
 def create_or_update_content_for(page)
   case page.url.to_s
   when CASE_INDEX
-    puts "#{page.url.path} parse case index"
+    CMA::OFT::Mergers::CaseList.from_html(page.doc).save!
   when CASE
     puts "#{page.url.path} parse case"
   when CASE_UNDERTAKINGS
