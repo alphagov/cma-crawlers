@@ -11,7 +11,7 @@ module CMA
         attr_accessor :title, :sector, :original_url
 
         def base_name
-          @base_name ||= URI.parse(original_url).path[1..-1].gsub('/', '-')
+          @base_name ||= CaseStore.base_name(original_url)
         end
 
         def assets
@@ -34,10 +34,8 @@ module CMA
           'mergers'
         end
 
-        ##
-        # Relative to the CaseStore
         def filename
-          File.join(case_type, base_name) + '.json'
+          base_name + '.json'
         end
 
         def to_json

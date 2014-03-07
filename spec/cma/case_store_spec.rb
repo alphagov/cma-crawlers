@@ -6,7 +6,7 @@ require 'fileutils'
 module CMA
   describe CaseStore do
     describe '.save' do
-      let(:expected_filename) { 'spec/fixtures/store/mergers/1-2-3-Name.json' }
+      let(:expected_filename) { 'spec/fixtures/store/1-2-3-Name.json' }
       let(:_case) do
         OFT::Mergers::Case.new.tap do |c|
           c.title = 'test'
@@ -31,6 +31,12 @@ module CMA
         its(:title)        { should eql('test') }
         its(:sector)       { should eql('test') }
         its(:original_url) { should eql('http://oft.gov.uk/1/2/3/Name') }
+      end
+
+      describe 'finding the case by URL' do
+        subject { CaseStore.instance.find('http://oft.gov.uk/1/2/3/Name') }
+
+        it { should be_an(OFT::Mergers::Case) }
       end
 
       describe 'cleaning the store' do

@@ -28,6 +28,15 @@ module CMA
       end
     end
 
+    def find(url)
+      load(File.join(location, CaseStore.base_name(url) + '.json'))
+    end
+
+    def self.base_name(original_url)
+      original_url = URI.parse(original_url) unless original_url.is_a?(URI)
+      original_url.path[1..-1].gsub('/', '-')
+    end
+
     def clean!
       Dir["#{location}/*"].each {|entry| FileUtils.rmtree(entry)}
     end
