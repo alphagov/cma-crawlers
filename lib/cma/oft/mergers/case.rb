@@ -26,6 +26,10 @@ module CMA
           CMA::CaseStore.instance.load(filename)
         end
 
+        def state
+          'open'
+        end
+
         def case_type
           'mergers'
         end

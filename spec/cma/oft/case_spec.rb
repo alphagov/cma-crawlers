@@ -10,6 +10,7 @@ module CMA
       shared_examples 'it has all the row properties of Alliance Medical' do
         it                 { should be_a(Mergers::Case) }
         its(:title)        { should eql('Alliance Medical / IBA Molecular') }
+        its(:state)        { should eql('open') }
         its(:case_type)    { should eql('mergers') }
         its(:sector)       { should eql('Healthcare') }
         its(:original_url) { should eql('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Alliance') }
