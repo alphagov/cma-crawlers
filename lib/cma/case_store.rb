@@ -16,7 +16,10 @@ module CMA
 
     def save(_case)
       FileUtils.mkdir_p(File.join(location, _case.case_type))
-      File.write(File.join(location, _case.filename), JSON.dump(_case.to_json))
+      File.write(
+        File.join(location, _case.filename),
+        JSON.pretty_generate(_case.to_json)
+      )
     end
 
     def load(filename)
