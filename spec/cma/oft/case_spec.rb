@@ -55,6 +55,33 @@ module CMA
           subject(:_case) { Mergers::Case.load(expected_path) }
 
           it_should_behave_like 'it has all the row properties of Alliance Medical'
+
+          describe 'augmenting the case with the top-level case page' do
+            before do
+              _case.add_details_from_case(
+                Nokogiri::HTML(File.read('spec/fixtures/oft/Arriva.html')))
+            end
+
+            describe 'the markdown for the invitation to comment' do
+              subject { _case.invitation_to_comment }
+
+              before { puts _case.invitation_to_comment }
+
+              it { should include 'Informal Submission' }
+              it { should include 'to arrive by' }
+              it { should_not include '<p>'}
+              it { should_not include '&nbsp;'}
+              it { should_not include '<script'}
+              it { should_not include '<span>'}
+              it { should_not include '<div'}
+              it { should_not include '[Initial'}
+              it { should_not include 'backtotop'}
+            end
+          end
+
+          describe 'adding an asset' do
+            before { _case.assets << Asset.new(File.read('spec/fixtures/oft/APS-letter.pdf'))}
+          end
         end
       end
     end

@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'kramdown'
 require 'cma/case_store'
 require 'uri'
 
@@ -8,7 +9,7 @@ module CMA
 
     module Mergers
       class Case
-        attr_accessor :title, :sector, :original_url
+        attr_accessor :title, :sector, :original_url, :invitation_to_comment
 
         def base_name
           @base_name ||= CaseStore.base_name(original_url)
@@ -40,11 +41,25 @@ module CMA
 
         def to_json
           {
-            'title'        => title,
-            'case_type'    => case_type,
-            'sector'       => sector,
-            'original_url' => original_url,
+            'title'                 => title,
+            'case_type'             => case_type,
+            'sector'                => sector,
+            'original_url'          => original_url,
+            'invitation_to_comment' => invitation_to_comment
           }
+        end
+
+        def add_details_from_case(doc)
+          doc.at_css('div.intro').tap do |intro|
+            %w(div span script a p.backtotop).each { |tag| intro.css(tag).remove }
+
+            self.invitation_to_comment = Kramdown::Document.new(
+              intro.inner_html.to_s,
+              input: 'html'
+            ).to_kramdown
+
+            save!
+          end
         end
 
         def self.from_case_list_row(row)
