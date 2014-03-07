@@ -27,5 +27,9 @@ module CMA
         c.sector       = json['sector']
       end
     end
+
+    def clean!
+      Dir["#{location}/*"].each {|entry| FileUtils.rmtree(entry)}
+    end
   end
 end

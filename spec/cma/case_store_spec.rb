@@ -32,6 +32,14 @@ module CMA
         its(:sector)       { should eql('test') }
         its(:original_url) { should eql('http://oft.gov.uk/1/2/3/Name') }
       end
+
+      describe 'cleaning the store' do
+        before { CaseStore.instance.clean! }
+
+        it 'has obliterated everything' do
+          Dir["#{CaseStore.instance.location}/*"].should have(0).entries
+        end
+      end
     end
   end
 end

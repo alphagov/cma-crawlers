@@ -38,7 +38,12 @@ module CMA
         let(:expected_path) { 'spec/fixtures/store/mergers/OFTwork-mergers-Mergers_Cases-2013-Alliance.json' }
 
         before do
+          CaseStore.instance.clean!
           mergers_case.save!
+        end
+
+        after do
+          CaseStore.instance.clean!
         end
 
         it 'saves to the default output path' do
