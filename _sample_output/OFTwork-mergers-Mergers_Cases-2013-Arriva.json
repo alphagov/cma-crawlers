@@ -1,0 +1,57 @@
+{
+  /*
+    Note that this file is invalid JSON due to comments. Remove if planning to
+    test an import with this data.
+    
+    Fields from finder-api/schema first. Filename is dasherized path
+    of the first level page.
+      
+    e.g. if this is scraped from
+     
+       http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Arriva
+    
+    then its filename is
+    
+       _sample_output/OFTwork-mergers-Mergers_Cases-2013-Arriva.json
+       
+    You can expect it to include the detail and attachments from these URLs:
+      * http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/ (detail from table row)
+      * http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Arriva#.UxmBTud_uMN (fragment ignored)
+
+    Fields below are gleaned from various target specialist systems, URL given in comment
+    block above each.
+    https://github.com/alphagov/govuk_content_models/blob/master/app/models/specialist_document_edition.rb
+    is not listed but all of the fields we can supply are already covered (I think)
+  */
+
+  /* Fields from https://github.com/alphagov/finder-api/blob/master/schemas/cma-cases.json */
+  "case_type": "mergers",
+  "case_state": "open",
+  "market_sector": "transport",
+  "outcome_type": "markets-phase-1-undertakings-in-lieu-of-reference",
+
+  /* Fields from https://github.com/alphagov/specialist-publisher/blob/master/app/models/specialist_document.rb
+     not already listed above */
+  "title": "Arriva Passenger Services Limited / Centrebus Holdings Limited",
+  "summary": "<doesn't seem available for mergers, may be for other OFT, e.g. http://www.oft.gov.uk/OFTwork/oft-current-cases/competition-case-list-2005/interchage-fees-mastercard>",
+  "body": "<we don't know where this is coming from yet - there isn't always one, could be invitation_to_comment for mergers?>",
+  /* All dates will be YYYY-MM-DD */
+  "opened_date": "<mergers: isn't one, other OFT: Start date from index table>",
+  "closed_date": "<we don't know where this is coming from yet - there isn't always one>",
+
+  /* Fields not in either of the above */
+  "invitation_to_comment": "<markdown here, see http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Arriva for what it might contain>",
+  "initial_undertakings": "<optional markdown field, see http://oft.gov.uk/OFTwork/mergers/register/Initial-undertakings for what it might contain>",
+
+  /* Assets */
+  "assets": [
+    {
+      "original_url": "http://oft.gov.uk/shared_oft/mergers_ea02/undertakings-2013/Arriva_Centre_Bus_-_initial1.pdf",
+      "filename": "OFTwork-mergers-Mergers_Cases-2013-Arriva/Arriva_Centre_Bus_-_initial1.pdf"
+    },
+    {
+      "original_url": "http://oft.gov.uk/shared_oft/mergers_ea02/undertakings-2014/APS-letter.pdf",
+      "filename": "OFTwork-mergers-Mergers_Cases-2013-Arriva/undertakings-2014/APS-letter.pdf"
+    }
+  ]   
+}
