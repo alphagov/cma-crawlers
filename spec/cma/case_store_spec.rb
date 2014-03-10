@@ -9,8 +9,8 @@ module CMA
       let(:expected_filename) { 'spec/fixtures/store/1-2-3-Name.json' }
       let(:_case) do
         OFT::Mergers::Case.new.tap do |c|
-          c.title = 'test'
-          c.sector = 'test'
+          c.title = 'test_title'
+          c.sector = 'test_sector'
           c.original_url = 'http://oft.gov.uk/1/2/3/Name'
         end
       end
@@ -28,8 +28,8 @@ module CMA
         subject { CaseStore.instance.load(expected_filename) }
 
         it                 { should be_an(OFT::Mergers::Case) }
-        its(:title)        { should eql('test') }
-        its(:sector)       { should eql('test') }
+        its(:title)        { should eql('test_title') }
+        its(:sector)       { should eql('test_sector') }
         its(:original_url) { should eql('http://oft.gov.uk/1/2/3/Name') }
       end
 
