@@ -27,7 +27,8 @@ module CMA
     end
 
     def filename
-      @filename ||= File.basename(URI.parse(original_url).path)
+      uri = original_url.is_a?(URI) ? original_url : URI.parse(original_url)
+      @filename ||= File.basename(uri.path)
     end
 
     def save!

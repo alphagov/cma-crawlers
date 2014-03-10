@@ -47,5 +47,15 @@ describe CMA::Asset do
         expect(File).to exist('spec/fixtures/store/case-base-name/APS-letter.pdf')
       end
     end
+
+    it 'calculates a filename correctly when the original_url is a URI' do
+      asset = CMA::Asset.new(
+        URI('http://some.asset/APS-letter.pdf'),
+        _case,
+        File.read('spec/fixtures/oft/APS-letter.pdf'),
+        'application/pdf')
+
+      asset.filename.should == 'APS-letter.pdf'
+    end
   end
 end
