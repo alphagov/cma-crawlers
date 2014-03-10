@@ -55,7 +55,7 @@ module CMA
         end
 
         def add_details_from_case(doc, setter)
-          doc.at_css('div.intro').tap do |intro|
+          doc.at_css('div.intro').dup.tap do |intro|
             %w(div span script a p.backtotop).each { |tag| intro.css(tag).remove }
 
             setter = (setter.to_s + '=').to_sym
