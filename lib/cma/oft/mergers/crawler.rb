@@ -47,7 +47,7 @@ module CMA
           when page.url.to_s =~ ASSET
             _case = find_nearest_case_matching(page.referer, CASE)
             if _case
-              asset = CMA::Asset.new(page.url, _case, page.doc, page.headers['content-type'])
+              asset = CMA::Asset.new(page.url, _case, page.body, page.headers['content-type'])
               asset.save!
               _case.assets << asset
               _case.save!
