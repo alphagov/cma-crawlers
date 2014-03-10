@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'kramdown'
 require 'cma/case_store'
 require 'uri'
+require 'active_model'
 
 module CMA
   module OFT
@@ -9,7 +10,10 @@ module CMA
 
     module Mergers
       class Case
-        attr_accessor :title, :sector, :original_url, :invitation_to_comment
+        include ActiveModel::Serializers::JSON
+
+        attr_accessor :title, :sector, :original_url,
+                      :invitation_to_comment, :initial_undertakings
 
         def base_name
           @base_name ||= CaseStore.base_name(original_url)
@@ -39,21 +43,23 @@ module CMA
           base_name + '.json'
         end
 
-        def to_json
-          {
-            'title'                 => title,
-            'case_type'             => case_type,
-            'sector'                => sector,
-            'original_url'          => original_url,
-            'invitation_to_comment' => invitation_to_comment
-          }
+        def attributes
+          instance_values
         end
 
-        def add_details_from_case(doc)
+        def attributes=(hash)
+          hash.each_pair do |k, v|
+            setter = "#{k}="
+            self.send(setter, v) if respond_to?(setter)
+          end
+        end
+
+        def add_details_from_case(doc, setter)
           doc.at_css('div.intro').tap do |intro|
             %w(div span script a p.backtotop).each { |tag| intro.css(tag).remove }
 
-            self.invitation_to_comment = Kramdown::Document.new(
+            setter = (setter.to_s + '=').to_sym
+            send setter, Kramdown::Document.new(
               intro.inner_html.to_s,
               input: 'html'
             ).to_kramdown

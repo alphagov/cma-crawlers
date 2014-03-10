@@ -56,31 +56,55 @@ module CMA
 
           it_should_behave_like 'it has all the row properties of Alliance Medical'
 
+          shared_examples 'it has no markup or fluff' do
+            it { should_not include '<p>'}
+            it { should_not include '&nbsp;'}
+            it { should_not include '<script'}
+            it { should_not include '<span>'}
+            it { should_not include '<div'}
+            it { should_not include '[Initial'}
+            it { should_not include 'backtotop'}
+          end
+
           describe 'augmenting the case with the top-level case page' do
             before do
               _case.add_details_from_case(
-                Nokogiri::HTML(File.read('spec/fixtures/oft/Arriva.html')))
+                Nokogiri::HTML(File.read('spec/fixtures/oft/Arriva.html')),
+                :invitation_to_comment
+              )
             end
 
             describe 'the markdown for the invitation to comment' do
               subject { _case.invitation_to_comment }
 
-              before { puts _case.invitation_to_comment }
-
               it { should include 'Informal Submission' }
               it { should include 'to arrive by' }
-              it { should_not include '<p>'}
-              it { should_not include '&nbsp;'}
-              it { should_not include '<script'}
-              it { should_not include '<span>'}
-              it { should_not include '<div'}
-              it { should_not include '[Initial'}
-              it { should_not include 'backtotop'}
+
+              it_behaves_like 'it has no markup or fluff'
+            end
+          end
+
+          describe 'augmenting the case with the initial undertakings' do
+            before do
+              _case.add_details_from_case(
+                Nokogiri::HTML(File.read('spec/fixtures/oft/Arriva-Initial-Undertakings.html')),
+                :initial_undertakings
+              )
+            end
+
+            describe 'the markdown for the initial undertakings' do
+              subject { _case.initial_undertakings }
+
+              it { should include '**Name of acquirer:' }
+
+              it_behaves_like 'it has no markup or fluff'
             end
           end
 
           describe 'adding an asset' do
-            before { _case.assets << Asset.new(File.read('spec/fixtures/oft/APS-letter.pdf'))}
+            it 'is pending' do
+              pending
+            end
           end
         end
       end

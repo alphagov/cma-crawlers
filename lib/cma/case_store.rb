@@ -18,16 +18,13 @@ module CMA
       FileUtils.mkdir_p(File.join(location, _case.case_type))
       File.write(
         File.join(location, _case.filename),
-        JSON.pretty_generate(_case.to_json)
+        JSON.pretty_generate(_case.serializable_hash)
       )
     end
 
     def load(filename)
-      json = JSON.load(File.read(filename))
       CMA::OFT::Mergers::Case.new.tap do |c|
-        c.title        = json['title']
-        c.original_url = json['original_url']
-        c.sector       = json['sector']
+        c.from_json(File.read(filename))
       end
     end
 
