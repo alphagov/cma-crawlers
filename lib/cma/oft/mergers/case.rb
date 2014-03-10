@@ -31,7 +31,7 @@ module CMA
           CMA::CaseStore.instance.load(filename)
         end
 
-        def state
+        def case_state
           'open'
         end
 
@@ -45,6 +45,14 @@ module CMA
 
         def attributes
           instance_values
+        end
+
+        def serializable_hash
+          super.tap do |hash|
+            hash.delete('base_name')
+            hash['case_type'] = case_type
+            hash['case_state'] = case_state
+          end
         end
 
         def attributes=(hash)

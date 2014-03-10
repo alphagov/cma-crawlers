@@ -10,7 +10,7 @@ module CMA
       shared_examples 'it has all the row properties of Alliance Medical' do
         it                 { should be_a(Mergers::Case) }
         its(:title)        { should eql('Alliance Medical / IBA Molecular') }
-        its(:state)        { should eql('open') }
+        its(:case_state)   { should eql('open') }
         its(:case_type)    { should eql('mergers') }
         its(:sector)       { should eql('Healthcare') }
         its(:original_url) { should eql('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Alliance') }
@@ -35,8 +35,8 @@ module CMA
       end
 
       describe 'serializing to the document store' do
-        let(:mergers_case)  { Mergers::Case.from_case_list_row(row) }
-        let(:expected_path) { 'spec/fixtures/store/OFTwork-mergers-Mergers_Cases-2013-Alliance.json' }
+        subject(:mergers_case) { Mergers::Case.from_case_list_row(row) }
+        let(:expected_path)    { 'spec/fixtures/store/OFTwork-mergers-Mergers_Cases-2013-Alliance.json' }
 
         before do
           CaseStore.instance.clean!
@@ -50,6 +50,17 @@ module CMA
         it 'saves to the default output path' do
           expect(File).to exist(expected_path)
         end
+
+        its(:serializable_hash) do
+          should eql({
+                       'title' => 'Alliance Medical / IBA Molecular',
+                       'original_url' => 'http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Alliance',
+                       'sector' => 'Healthcare',
+                       'case_type' => 'mergers',
+                       'case_state' => 'open'
+                     })
+        end
+
 
         describe 'loading it back' do
           subject(:_case) { Mergers::Case.load(expected_path) }
