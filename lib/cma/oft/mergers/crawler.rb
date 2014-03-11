@@ -38,7 +38,9 @@ module CMA
               _case.add_details_from_case(page.doc, :initial_undertakings)
             end
           when page_url =~ CASE_DECISION
-            puts "#{page.url.path} parse decision"
+            with_case(page.referer) do  |_case|
+              _case.add_details_from_case(page.doc, :decision)
+            end
           when page_url =~ ASSET
             with_nearest_case_matching(page.referer, CASE) do |_case|
               asset = CMA::Asset.new(page.url.to_s, _case, page.body, page.headers['content-type'].first)

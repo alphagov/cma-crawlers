@@ -13,7 +13,7 @@ module CMA
         include ActiveModel::Serializers::JSON
 
         attr_accessor :title, :sector, :original_url,
-                      :invitation_to_comment, :initial_undertakings
+                      :invitation_to_comment, :decision, :initial_undertakings
 
         attr_writer :assets
 
