@@ -1,10 +1,8 @@
 require 'cma/case'
-require 'cma/oft/sector_mappings'
+require 'cma/oft'
 
 module CMA
   module OFT
-    BASE_URI = 'http://oft.gov.uk'
-
     module Mergers
       class Case < CMA::Case
         attr_accessor :invitation_to_comment, :decision, :initial_undertakings

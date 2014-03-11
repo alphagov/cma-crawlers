@@ -1,9 +1,8 @@
 require 'cma/case'
+require 'cma/oft'
 
 module CMA
   module OFT
-    BASE_URI = 'http://oft.gov.uk'
-
     module Competition
       class Case < CMA::Case
         def case_type

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'nokogiri'
 require 'cma/oft/competition/case_list'
-require 'cma/oft/sector_mappings'
+require 'cma/oft'
 require 'fileutils'
 
 module CMA

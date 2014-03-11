@@ -1,5 +1,7 @@
 module CMA
   module OFT
+    BASE_URI = 'http://oft.gov.uk'
+
     SECTOR_MAPPINGS = {
       'Healthcare' => 'healthcare-and-medical-equipment',
       'local bus services' => 'transport',
