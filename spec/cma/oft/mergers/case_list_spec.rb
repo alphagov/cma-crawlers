@@ -22,10 +22,13 @@ module CMA
               cases.save!
             end
 
+            after do
+              FileUtils.rmdir('spec/fixtures/store')
+            end
+
             it 'saved all cases' do
               cases.each do |c|
-                puts c.filename
-                expect(File).to exist(c.filename)
+                expect(File).to exist(File.join(CaseStore.instance.location, c.filename))
               end
             end
           end

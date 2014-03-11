@@ -3,13 +3,12 @@ require 'kramdown'
 require 'cma/case_store'
 require 'uri'
 require 'active_model'
-require 'cma/oft/sector_mappings'
 
 module CMA
   module OFT
     BASE_URI = 'http://oft.gov.uk'
 
-    module Mergers
+    module Competition
       class Case
         include ActiveModel::Serializers::JSON
 
@@ -39,7 +38,7 @@ module CMA
         end
 
         def case_type
-          'mergers'
+          'ca98-and-civil-cartels'
         end
 
         def filename
@@ -85,9 +84,9 @@ module CMA
           Case.new.tap do |c|
             case_link = row.at_css('td a')
 
-            c.title        = case_link.text
+            c.title        = case_link.text.split("\r").first
             c.original_url = File.join(BASE_URI, case_link['href'])
-            sector_text    = row.at_xpath('td[2]').text.strip
+            sector_text    = case_link.text.split("\r")[6].strip
             c.sector       = SECTOR_MAPPINGS[sector_text] || "Missing mapping for '#{c.sector}'"
           end
         end

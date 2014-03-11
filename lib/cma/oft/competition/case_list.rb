@@ -1,8 +1,8 @@
-require 'cma/oft/mergers/case'
+require 'cma/oft/competition/case'
 
 module CMA
   module OFT
-    module Mergers
+    module Competition
       class CaseList
         include Enumerable
 
@@ -12,7 +12,7 @@ module CMA
 
         def cases
           @cases ||= begin
-            case_rows = @doc.xpath('//table/tr')
+            case_rows = @doc.xpath('//table[1]/tr')
             case_rows.map { |row| Case.from_case_list_row(row) }
           end
         end
