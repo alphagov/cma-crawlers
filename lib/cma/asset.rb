@@ -19,6 +19,8 @@ module CMA
       %w(original_url content_type filename).inject({}) do |hash, key|
         hash[key] = self.send(key.to_sym)
         hash
+      end.tap do |hash|
+        hash['filename'] = File.join(owner.base_name, filename) if owner
       end
     end
 

@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'cma/oft/mergers/case'
+require 'cma/asset'
 
 module CMA
   module OFT
@@ -113,8 +114,32 @@ module CMA
           end
 
           describe 'adding an asset' do
-            it 'is pending' do
-              pending
+            let(:asset) do
+              CMA::Asset.new(
+                'http://some.asset/name.pdf',
+                _case,
+                'PDF 1.6/Content',
+                'application/pdf'
+              )
+            end
+            let(:assets) { [asset, asset.dup] }
+
+            before { _case.assets = assets }
+
+            it 'serializes the asset to JSON' do
+              JSON.load(_case.to_json)['assets'].should eql(
+                [{
+                   'original_url' => 'http://some.asset/name.pdf',
+                   'content_type' => 'application/pdf',
+                   'filename'     => 'OFTwork-mergers-Mergers_Cases-2013-Alliance/name.pdf'
+                 },
+                 {
+                   'original_url' =>
+                     'http://some.asset/name.pdf',
+                   'content_type' => 'application/pdf',
+                   'filename'     => 'OFTwork-mergers-Mergers_Cases-2013-Alliance/name.pdf' }
+                ]
+              )
             end
           end
         end

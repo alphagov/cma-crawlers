@@ -36,7 +36,7 @@ describe CMA::Asset do
       JSON.parse(asset.to_json).should eql({
         'original_url' => 'http://some.asset/APS-letter.pdf',
         'content_type' => 'application/pdf',
-        'filename'     => 'APS-letter.pdf'
+        'filename'     => 'case-base-name/APS-letter.pdf'
       })
     end
 

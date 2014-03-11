@@ -15,12 +15,14 @@ module CMA
         attr_accessor :title, :sector, :original_url,
                       :invitation_to_comment, :initial_undertakings
 
-        def base_name
-          @base_name ||= CaseStore.base_name(original_url)
-        end
+        attr_writer :assets
 
         def assets
-          []
+          @assets ||= []
+        end
+
+        def base_name
+          @base_name ||= CaseStore.base_name(original_url)
         end
 
         def save!
@@ -47,7 +49,7 @@ module CMA
           instance_values
         end
 
-        def serializable_hash
+        def serializable_hash(options={})
           super.tap do |hash|
             hash.delete('base_name')
             hash['case_type'] = case_type
