@@ -2,11 +2,17 @@ require 'singleton'
 require 'json'
 require 'fileutils'
 
+require 'cma/oft/mergers/case'
+require 'cma/oft/competition/case'
+
 module CMA
   class CaseStore
     include Singleton
 
     DEFAULT_LOCATION = '_output'
+
+    MERGER_CASE      = /OFTwork-mergers-Mergers/
+    COMPETITION_CASE = /OFTwork-oft-current-cases/
 
     attr_accessor :location
 
@@ -22,8 +28,17 @@ module CMA
       )
     end
 
+    def load_class(filename)
+      case filename
+        when MERGER_CASE      then CMA::OFT::Mergers::Case
+        when COMPETITION_CASE then CMA::OFT::Competition::Case
+        else
+          raise ArgumentError, "Class for #{filename} not found"
+      end
+    end
+
     def load(filename)
-      CMA::OFT::Mergers::Case.new.tap do |c|
+      load_class(filename).new.tap do |c|
         c.from_json(File.read(filename))
       end
     end
