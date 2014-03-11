@@ -25,34 +25,26 @@ module CMA
         ]
 
         def create_or_update_content_for(page)
+          page_url = page.url.to_s
           case
-          when page.url.to_s =~ CASE_INDEX
+          when page_url =~ CASE_INDEX
             CMA::OFT::Mergers::CaseList.from_html(page.doc).save!
-          when page.url.to_s =~ CASE
-            _case = CMA::CaseStore.instance.find(page.url)
-            if _case
+          when page_url =~ CASE
+            with_case(page.url) do  |_case|
               _case.add_details_from_case(page.doc, :invitation_to_comment)
-            else
-              puts "*** WARN: case for #{page.url} not found"
             end
-          when page.url.to_s =~ CASE_UNDERTAKINGS
-            _case = CMA::CaseStore.instance.find(page.referer)
-            if _case
+          when page_url =~ CASE_UNDERTAKINGS
+            with_case(page.referer) do  |_case|
               _case.add_details_from_case(page.doc, :initial_undertakings)
-            else
-              puts "*** WARN: case for #{page.url} not found"
             end
-          when page.url.to_s =~ CASE_DECISION
+          when page_url =~ CASE_DECISION
             puts "#{page.url.path} parse decision"
-          when page.url.to_s =~ ASSET
-            _case = find_nearest_case_matching(page.referer, CASE)
-            if _case
+          when page_url =~ ASSET
+            with_nearest_case_matching(page.referer, CASE) do |_case|
               asset = CMA::Asset.new(page.url.to_s, _case, page.body, page.headers['content-type'].first)
               asset.save!
               _case.assets << asset
               _case.save!
-            else
-              puts "*** WARN: case for asset #{page.url} not found"
             end
           else
             puts "*** WARN: skipping #{page.url}"
@@ -63,10 +55,21 @@ module CMA
           @crawl
         end
 
-        def find_nearest_case_matching(url, regex = CASE)
+        def with_case(url)
+          _case = CMA::CaseStore.instance.find(url)
+          if _case
+            yield _case
+          else
+            puts "*** WARN: case for #{url} not found"
+          end
+        end
+
+        def with_nearest_case_matching(url, regex = CASE)
           page = find_nearest_page_matching(url, regex)
           raise ArgumentError, "No page available for #{url}" if page.nil?
-          CMA::CaseStore.instance.find(page.url.to_s)
+          CMA::CaseStore.instance.find(page.url.to_s).tap do |_case|
+            yield _case unless _case.nil?
+          end
         end
 
         ##
