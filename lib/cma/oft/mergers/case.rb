@@ -13,11 +13,11 @@ module CMA
           'mergers'
         end
 
-        def add_details_from_case(doc, setter)
+        def add_details_from_case(doc, attr)
           doc.at_css('div.intro').dup.tap do |intro|
             %w(div span script a p.backtotop).each { |tag| intro.css(tag).remove }
 
-            setter = (setter.to_s + '=').to_sym
+            setter = (attr.to_s + '=').to_sym
             send setter, Kramdown::Document.new(
               intro.inner_html.to_s,
               input: 'html'
