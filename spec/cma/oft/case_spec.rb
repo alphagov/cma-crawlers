@@ -124,7 +124,7 @@ module CMA
             end
             let(:assets) { [asset, asset.dup] }
 
-            before { _case.assets = assets }
+            before { assets.each { |a| _case.assets << a } }
 
             it 'serializes the asset to JSON' do
               JSON.load(_case.to_json)['assets'].should eql(

@@ -18,7 +18,7 @@ module CMA
       FileUtils.mkdir_p(File.join(location, _case.case_type))
       File.write(
         File.join(location, _case.filename),
-        JSON.pretty_generate(_case.serializable_hash)
+        JSON.pretty_generate(JSON.parse(_case.to_json))
       )
     end
 

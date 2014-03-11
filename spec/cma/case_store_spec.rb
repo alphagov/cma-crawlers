@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'cma/oft/mergers/case'
 require 'cma/case_store'
+require 'cma/asset'
 require 'fileutils'
 
 module CMA
@@ -12,6 +13,8 @@ module CMA
           c.title = 'test_title'
           c.sector = 'test_sector'
           c.original_url = 'http://oft.gov.uk/1/2/3/Name'
+
+          c.assets << CMA::Asset.new('http://1', c, '1234', 'text/plain')
         end
       end
 

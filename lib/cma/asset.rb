@@ -15,7 +15,7 @@ module CMA
       self.content_type = content_type
     end
 
-    def serializable_hash(options)
+    def serializable_hash(options = {})
       %w(original_url content_type filename).inject({}) do |hash, key|
         hash[key] = self.send(key.to_sym)
         hash
