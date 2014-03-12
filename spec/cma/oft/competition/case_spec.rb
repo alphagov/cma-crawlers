@@ -24,10 +24,16 @@ module CMA
           end
         end
 
-        context 'the happy path' do
+        context 'the happy path, first row' do
           subject      { Competition::Case.from_case_list_row(row) }
 
           it_should_behave_like 'it has all the row properties of Mastercard / VISA MIFs'
+        end
+
+        context 'second row, sector' do
+          subject { Competition::Case.from_case_list_row(doc.at_xpath('//table/tr[2]'))}
+
+          its(:sector) { should eql('motor-industry') }
         end
       end
 

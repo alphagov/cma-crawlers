@@ -47,7 +47,7 @@ module CMA
 
             c.title        = case_link.text.split("\r").first
             c.original_url = File.join(BASE_URI, case_link['href'])
-            sector_text    = case_link.text.split("\r")[6].strip
+            /Sector.+\r\n(?<sector_text>.*)/m =~ case_link.text
             c.sector       = SECTOR_MAPPINGS[sector_text] || "Missing mapping for '#{c.sector}'"
           end
         end
