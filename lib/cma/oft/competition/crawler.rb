@@ -45,7 +45,7 @@ module CMA
             CMA::OFT::Competition::CaseList.from_html(page.doc).save!
           when page_url =~ CASE
             with_case(page.url) do |_case|
-              puts 'TODO: Adding CASE'
+              _case.add_summary(page.doc)
             end
           when page_url =~ CASE_DETAIL
             with_case(page.referer) do |_case|

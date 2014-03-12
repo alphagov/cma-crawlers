@@ -5,8 +5,15 @@ module CMA
   module OFT
     module Competition
       class Case < CMA::Case
+        attr_accessor :summary
+
         def case_type
           'ca98-and-civil-cartels'
+        end
+
+        def add_summary(doc)
+          self.summary = doc.at_xpath('//div[@class="intro"]/p[2]').content
+          save!
         end
 
         def self.from_case_list_row(row)

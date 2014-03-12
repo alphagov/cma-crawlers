@@ -31,6 +31,14 @@ module CMA
         end
       end
 
+      describe 'augmenting with summary from the CASE page' do
+        subject(:_case) { Competition::Case.from_case_list_row(row) }
+
+        before { _case.add_summary(Nokogiri::HTML(File.read('spec/fixtures/oft/mastercard-case.html'))) }
+
+        its(:summary) { should start_with('The OFT is investigating') }
+      end
+
       describe 'serializing to the document store' do
         subject(:competition_case) { Competition::Case.from_case_list_row(row) }
         let(:expected_path)    { 'spec/fixtures/store/OFTwork-oft-current-cases-competition-case-list-2005-interchage-fees-mastercard.json' }
@@ -72,10 +80,6 @@ module CMA
             it { should_not include '<div'}
             it { should_not include '[Initial'}
             it { should_not include 'backtotop'}
-          end
-
-          describe 'augmenting the case with the summary case page' do
-            it 'is pending'
           end
 
           describe 'adding an asset' do
