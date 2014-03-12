@@ -5,7 +5,7 @@ module CMA
   module OFT
     module Competition
       class Case < CMA::Case
-        attr_accessor :summary
+        attr_accessor :summary, :body
 
         def case_type
           'ca98-and-civil-cartels'
@@ -14,6 +14,29 @@ module CMA
         def add_summary(doc)
           self.summary = doc.at_xpath('//div[@class="intro"]/p[2]').content
           save!
+        end
+
+        def add_detail(doc)
+          doc.dup.at_css('.body-copy').tap do |body_copy|
+            %w(div span script p.backtotop p.previouspage).each do |selector|
+              body_copy.css(selector).remove
+            end
+
+            %w(
+              //table/@*
+              //a/@target
+              //comment()
+            ).each do |superfluous_nodes|
+              body_copy.xpath(superfluous_nodes).each(&:unlink)
+            end
+
+            self.body = Kramdown::Document.new(
+              body_copy.inner_html.to_s,
+              input: 'html'
+            ).to_kramdown
+
+            save!
+          end
         end
 
         def self.from_case_list_row(row)

@@ -31,12 +31,27 @@ module CMA
         end
       end
 
-      describe 'augmenting with summary from the CASE page' do
+      describe 'augmenting with' do
         subject(:_case) { Competition::Case.from_case_list_row(row) }
 
-        before { _case.add_summary(Nokogiri::HTML(File.read('spec/fixtures/oft/mastercard-case.html'))) }
+        describe 'summary from the CASE page' do
+          before { _case.add_summary(Nokogiri::HTML(File.read('spec/fixtures/oft/mastercard-case.html'))) }
 
-        its(:summary) { should start_with('The OFT is investigating') }
+          its(:summary) { should start_with('The OFT is investigating') }
+        end
+
+        describe 'detail from the CASE_DETAIL page' do
+          before { _case.add_detail(Nokogiri::HTML(File.read('spec/fixtures/oft/mastercard-case-detail.html'))) }
+
+          subject(:body) { _case.body }
+
+          it_behaves_like 'it has no markup or fluff'
+
+          it { should include('The UK Government intervened') }
+          it { should_not include('back to top') }
+          it { should_not include('Content on this page') }
+          it { should_not include('Back to:') }
+        end
       end
 
       describe 'serializing to the document store' do

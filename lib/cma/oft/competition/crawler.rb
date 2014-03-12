@@ -48,7 +48,7 @@ module CMA
             end
           when page_url =~ CASE_DETAIL
             with_case(page.referer) do |_case|
-              puts 'TODO: Adding CASE_DETAIL'
+              _case.add_detail(page.doc)
             end
           when page_url =~ ASSET
             # There are probably no assets, but I'm not betting against one
@@ -62,10 +62,6 @@ module CMA
           else
             puts "*** WARN: skipping #{page.url} from #{page.referer}"
           end
-        end
-
-        def crawl
-          @crawl
         end
 
         def crawl!
