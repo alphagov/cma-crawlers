@@ -47,13 +47,13 @@ module CMA
               _case.add_summary(page.doc)
             end
           when page_url =~ CASE_DETAIL
-            with_case(page.referer) do |_case|
+            with_case(page.referer, page_url) do |_case|
               _case.add_detail(page.doc)
             end
           when page_url =~ ASSET
             # There are probably no assets, but I'm not betting against one
             # turning up while we're writing the crawler.
-            with_nearest_case_matching(page.referer, CASE) do |_case|
+            with_nearest_case_matching(page.referer, CASE, page_url) do |_case|
               asset = CMA::Asset.new(page.url.to_s, _case, page.body, page.headers['content-type'].first)
               asset.save!
               _case.assets << asset

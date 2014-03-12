@@ -87,6 +87,7 @@ module CMA
           should eql({
                        'title'        => 'Mastercard / VISA MIFs',
                        'original_url' => 'http://oft.gov.uk/OFTwork/oft-current-cases/competition-case-list-2005/interchage-fees-mastercard',
+                       'original_urls'=> ['http://oft.gov.uk/OFTwork/oft-current-cases/competition-case-list-2005/interchage-fees-mastercard'],
                        'sector'       => 'financial-services',
                        'case_type'    => 'ca98-and-civil-cartels',
                        'case_state'   => 'open'

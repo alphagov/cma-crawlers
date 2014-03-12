@@ -29,15 +29,15 @@ module CMA
           when page_url =~ CASE_INDEX
             CMA::OFT::Mergers::CaseList.from_html(page.doc).save!
           when page_url =~ CASE
-            with_case(page.url) do  |_case|
+            with_case(page.url) do |_case|
               _case.add_details_from_case(page.doc, :invitation_to_comment)
             end
           when page_url =~ CASE_UNDERTAKINGS
-            with_case(page.referer) do  |_case|
+            with_case(page.referer, page_url) do |_case|
               _case.add_details_from_case(page.doc, :initial_undertakings)
             end
           when page_url =~ CASE_DECISION
-            with_case(page.referer) do  |_case|
+            with_case(page.referer, page_url) do |_case|
               _case.add_details_from_case(page.doc, :decision)
             end
           when page_url =~ ASSET

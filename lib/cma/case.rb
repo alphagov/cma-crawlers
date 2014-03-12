@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'kramdown'
 require 'uri'
 require 'active_model'
+require 'set'
 
 module CMA
   class Case
@@ -13,6 +14,10 @@ module CMA
 
     def assets
       @assets ||= []
+    end
+
+    def original_urls
+      @original_urls ||= Set.new([original_url].compact)
     end
 
     def base_name
@@ -40,10 +45,11 @@ module CMA
     end
 
     def serializable_hash(options={})
-      super.tap do |hash|
+      super(options).tap do |hash|
         hash.delete('base_name')
         hash['case_type']  = case_type
         hash['case_state'] = case_state
+        hash['original_urls'] = (original_urls << original_url).to_a
       end
     end
 

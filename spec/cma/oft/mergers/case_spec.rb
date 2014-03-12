@@ -15,6 +15,9 @@ module CMA
         its(:case_type)    { should eql('mergers') }
         its(:sector)       { should eql('healthcare-and-medical-equipment') }
         its(:original_url) { should eql('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Alliance') }
+        its(:original_urls) do
+          should == Set.new(['http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Alliance'])
+        end
         its(:base_name)    { should eql('OFTwork-mergers-Mergers_Cases-2013-Alliance')}
         its(:filename)     { should eql('OFTwork-mergers-Mergers_Cases-2013-Alliance.json')}
         its(:assets)       { should be_empty }
@@ -56,6 +59,7 @@ module CMA
           should eql({
                        'title' => 'Alliance Medical / IBA Molecular',
                        'original_url' => 'http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Alliance',
+                       'original_urls' => ['http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/Alliance'],
                        'sector' => 'healthcare-and-medical-equipment',
                        'case_type' => 'mergers',
                        'case_state' => 'open'

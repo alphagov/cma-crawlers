@@ -8,21 +8,20 @@ module CMA
       # #crawl! method, but hey
       attr_reader :crawl
 
-      def with_case(url)
+      def with_case(url, from = nil)
         _case = CMA::CaseStore.instance.find(url)
         if _case
+          _case.original_urls << from.to_s if from
           yield _case
         else
           puts "*** WARN: case for #{url} not found"
         end
       end
 
-      def with_nearest_case_matching(url, regex)
+      def with_nearest_case_matching(url, regex, from = nil, &block)
         page = find_nearest_page_matching(url, regex)
         raise ArgumentError, "No page available for #{url}" if page.nil?
-        CMA::CaseStore.instance.find(page.url.to_s).tap do |_case|
-          yield _case unless _case.nil?
-        end
+        with_case(page.url.to_s, from, &block)
       end
 
       ##
