@@ -1,9 +1,10 @@
 require 'cma/asset'
+require 'cma/oft/crawler'
 
 module CMA
   module OFT
     module Mergers
-      class Crawler
+      class Crawler < CMA::OFT::Crawler
         CASE_INDEX        = %r{/OFTwork/mergers/Mergers_Cases/?$}
         CASE              = %r{/OFTwork/mergers/Mergers_Cases/20[0-9]{2}/[a-z|A-Z|0-9]+}
         CASE_UNDERTAKINGS = %r{/OFTwork/mergers/register/Initial-undertakings}
@@ -13,8 +14,6 @@ module CMA
         MERGERS_INDEX_PAGES  = %r{/OFTwork/mergers/Mergers_Cases/20[0-9]{2}/?$}
         MERGERS_FILTER_PAGES = %r{\?caseByCompany=}
         MERGERS_FTA          = %r{mergers_fta}
-        MAILTO_LINKS         = %r{mailto:}
-        IN_PAGE_ANCHORS      = %r{/?#}
 
         SKIP_LINKS_LIKE = [
           MERGERS_INDEX_PAGES,
@@ -51,37 +50,6 @@ module CMA
           else
             puts "*** WARN: skipping #{page.url}"
           end
-        end
-
-        def crawl
-          @crawl
-        end
-
-        def with_case(url)
-          _case = CMA::CaseStore.instance.find(url)
-          if _case
-            yield _case
-          else
-            puts "*** WARN: case for #{url} not found"
-          end
-        end
-
-        def with_nearest_case_matching(url, regex = CASE)
-          page = find_nearest_page_matching(url, regex)
-          raise ArgumentError, "No page available for #{url}" if page.nil?
-          CMA::CaseStore.instance.find(page.url.to_s).tap do |_case|
-            yield _case unless _case.nil?
-          end
-        end
-
-        ##
-        # Use the Anemone page store to find the closest referer in the crawl tree
-        # that is a case (or nil if any URL in the chain can't be found)
-        def find_nearest_page_matching(url, regex = CASE)
-          page = @crawl.pages[url]
-          return page if page.nil? || page.url.to_s =~ regex
-
-          find_nearest_page_matching(page.referer)
         end
 
         def crawl!

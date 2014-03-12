@@ -8,12 +8,12 @@ require 'fileutils'
 module CMA
   describe CaseStore do
     describe '.save' do
-      let(:expected_filename) { 'spec/fixtures/store/1-2-3-Name.json' }
+      let(:expected_filename) { 'spec/fixtures/store/OFTwork-mergers-Mergers_Cases-2013-DiageoUnitedSpirits.json' }
       let(:_case) do
         OFT::Mergers::Case.new.tap do |c|
           c.title = 'test_title'
           c.sector = 'test_sector'
-          c.original_url = 'http://oft.gov.uk/1/2/3/Name'
+          c.original_url = 'http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits'
 
           c.assets << CMA::Asset.new('http://1', c, '1234', 'text/plain')
         end
@@ -43,11 +43,11 @@ module CMA
         it                 { should be_an(OFT::Mergers::Case) }
         its(:title)        { should eql('test_title') }
         its(:sector)       { should eql('test_sector') }
-        its(:original_url) { should eql('http://oft.gov.uk/1/2/3/Name') }
+        its(:original_url) { should eql('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits') }
       end
 
       describe 'finding the case by URL' do
-        subject { CaseStore.instance.find('http://oft.gov.uk/1/2/3/Name') }
+        subject { CaseStore.instance.find('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits') }
 
         it { should be_an(OFT::Mergers::Case) }
       end
