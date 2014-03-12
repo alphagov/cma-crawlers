@@ -28,7 +28,8 @@ module CMA
       'Distribution of road fuels in parts of Scotland' => 'distribution-and-service-industries',
       'pharmaceuticals' => 'pharmaceuticals',
       'Construction industry' => 'building-and-construction',
-      'Fabricated metal products' => 'building-and-construction'
+      'Fabricated metal products' => 'building-and-construction',
+      'Supply of folding cartonboard packaging' => 'paper-printing-and-packaging'
     }
   end
 end
