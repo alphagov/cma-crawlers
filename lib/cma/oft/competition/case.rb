@@ -8,7 +8,7 @@ module CMA
         attr_accessor :summary, :body
 
         def case_type
-          'ca98-and-civil-cartels'
+          title =~ /^Criminal/ ? 'criminal-cartels' : 'ca98-and-civil-cartels'
         end
 
         def add_summary(doc)

@@ -35,6 +35,12 @@ module CMA
 
           its(:sector) { should eql('motor-industry') }
         end
+
+        context 'last row, criminal' do
+          subject { Competition::Case.from_case_list_row(doc.at_xpath('//table/tr[last()]'))}
+
+          its(:case_type) { should eql('criminal-cartels') }
+        end
       end
 
       describe 'augmenting with' do
