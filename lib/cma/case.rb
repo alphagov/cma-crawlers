@@ -1,6 +1,5 @@
 require 'nokogiri'
 require 'kramdown'
-require 'cma/case_store'
 require 'uri'
 require 'active_model'
 
