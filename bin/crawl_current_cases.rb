@@ -2,8 +2,6 @@
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
-require 'anemone'
-require 'cma/oft/competition/case_list'
-require 'cma/oft/competition/crawler'
+require 'cma/oft/current/crawler'
 
-CMA::OFT::Competition::Crawler.new.crawl!
+CMA::OFT::Current::Crawler.new.crawl!
