@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'cma/oft/mergers/case'
 require 'cma/oft/competition/case'
+require 'cma/oft/consumer/case'
 require 'cma/case_store'
 require 'cma/asset'
 require 'fileutils'
@@ -30,10 +31,16 @@ module CMA
 
       describe 'what to load via .load_class' do
         it 'loads a Mergers case for a merger URL' do
-          CaseStore.instance.load_class('Somestore/OFTwork-mergers-Mergers_Cases-2013-Alliance.json').should == CMA::OFT::Mergers::Case
+          CaseStore.instance.load_class('Somestore/OFTwork-mergers-Mergers_Cases-2013-Alliance.json').
+            should == CMA::OFT::Mergers::Case
         end
-        it 'loads a Competition case for a merger URL' do
-          CaseStore.instance.load_class('somestore/OFTwork-oft-current-cases-somecase.json').should == CMA::OFT::Competition::Case
+        it 'loads a Competition case for a competition URL' do
+          CaseStore.instance.load_class('somestore/OFTwork-oft-current-cases-competition-case-list-2005-interchage-fees-mastercard.json').
+            should == CMA::OFT::Competition::Case
+        end
+        it 'loads a Consumer case for a consumer URL' do
+          CaseStore.instance.load_class('somestore/OFTwork-oft-current-cases-consumer-case-list-2012-furniture-carpets.json').
+            should == CMA::OFT::Consumer::Case
         end
       end
 

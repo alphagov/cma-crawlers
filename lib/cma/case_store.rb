@@ -4,6 +4,7 @@ require 'fileutils'
 
 require 'cma/oft/mergers/case'
 require 'cma/oft/competition/case'
+require 'cma/oft/consumer/case'
 
 module CMA
   class CaseStore
@@ -12,7 +13,8 @@ module CMA
     DEFAULT_LOCATION = '_output'
 
     MERGER_CASE      = /OFTwork-mergers-Mergers/
-    COMPETITION_CASE = /OFTwork-oft-current-cases/
+    COMPETITION_CASE = /OFTwork-oft-current-cases-competition/
+    CONSUMER_CASE    = /OFTwork-oft-current-cases-consumer/
 
     attr_accessor :location
 
@@ -32,6 +34,7 @@ module CMA
       case filename
         when MERGER_CASE      then CMA::OFT::Mergers::Case
         when COMPETITION_CASE then CMA::OFT::Competition::Case
+        when CONSUMER_CASE    then CMA::OFT::Consumer::Case
         else
           raise ArgumentError, "Class for #{filename} not found"
       end
