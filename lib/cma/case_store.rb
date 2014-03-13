@@ -55,7 +55,7 @@ module CMA
 
     def self.base_name(original_url)
       original_url = URI.parse(original_url) unless original_url.is_a?(URI)
-      original_url.path[1..-1].gsub('/', '-')
+      original_url.path[1..-1].gsub('/', '-').sub(/-$/, '')
     end
 
     def clean!
