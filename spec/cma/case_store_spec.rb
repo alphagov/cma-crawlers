@@ -42,6 +42,14 @@ module CMA
           CaseStore.instance.load_class('somestore/OFTwork-oft-current-cases-consumer-case-list-2012-furniture-carpets.json').
             should == CMA::OFT::Consumer::Case
         end
+        it 'loads a Markets case for a markets URL' do
+          CaseStore.instance.load_class('somestore/OFTwork-oft-current-cases-markets-work2013/higher-education-cfi.json').
+            should == CMA::OFT::Markets::Case
+        end
+        it 'loads a Markets case for a markets URL' do
+          CaseStore.instance.load_class('_output/OFTwork-oft-current-cases-market-studies-2012-personal-current-accounts.json').
+            should == CMA::OFT::Markets::Case
+        end
       end
 
       describe 'loading the case' do
