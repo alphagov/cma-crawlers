@@ -20,7 +20,7 @@ module CMA
 
       def with_nearest_case_matching(url, regex, from = nil, &block)
         page = find_nearest_page_matching(url, regex)
-        raise ArgumentError, "No page available for #{url}" if page.nil?
+        raise ArgumentError, "No page matching #{regex} available for #{url}" if page.nil?
         with_case(page.url.to_s, from, &block)
       end
 
