@@ -12,7 +12,7 @@ module CMA
         end
 
         def case_class
-          Case
+          CMA::OFT::Mergers::Case
         end
       end
     end

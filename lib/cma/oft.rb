@@ -29,7 +29,10 @@ module CMA
       'pharmaceuticals' => 'pharmaceuticals',
       'Construction industry' => 'building-and-construction',
       'Fabricated metal products' => 'building-and-construction',
-      'Supply of folding cartonboard packaging' => 'paper-printing-and-packaging'
+      'Supply of folding cartonboard packaging' => 'paper-printing-and-packaging',
+      'Retail and wholesale' => 'retail-and-wholesale',
+      'Retail' => 'retail-and-wholesale',
+      'Property' => 'building-and-construction'
     }
   end
 end

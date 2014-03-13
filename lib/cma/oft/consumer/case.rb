@@ -2,10 +2,10 @@ require 'cma/oft/current/case'
 
 module CMA
   module OFT
-    module Competition
+    module Consumer
       class Case < CMA::OFT::Current::Case
         def case_type
-          title =~ /^Criminal/ ? 'criminal-cartels' : 'ca98-and-civil-cartels'
+          'consumer-enforcement'
         end
       end
     end

@@ -1,17 +1,18 @@
 require 'cma/oft/row_based_case_list'
+require 'cma/oft/consumer/case'
 
 module CMA
   module OFT
-    module Competition
+    module Consumer
       class CaseList
         include CMA::OFT::RowBasedCaseList
 
         def row_xpath
-          '//table[1]/tr'
+          '//table[2]/tr'
         end
 
         def case_class
-          CMA::OFT::Competition::Case
+          Case
         end
       end
     end
