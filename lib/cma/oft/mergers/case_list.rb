@@ -1,32 +1,18 @@
+require 'cma/oft/row_based_case_list'
 require 'cma/oft/mergers/case'
 
 module CMA
   module OFT
     module Mergers
       class CaseList
-        include Enumerable
+        include CMA::OFT::RowBasedCaseList
 
-        def initialize(doc)
-          @doc = doc
+        def row_xpath
+          '//table/tr'
         end
 
-        def cases
-          @cases ||= begin
-            case_rows = @doc.xpath('//table/tr')
-            case_rows.map { |row| Case.from_case_list_row(row) }
-          end
-        end
-
-        def each
-          cases.each {|c| yield c}
-        end
-
-        def save!
-          cases.each(&:save!)
-        end
-
-        def self.from_html(html)
-          CaseList.new(html)
+        def case_class
+          Case
         end
       end
     end
