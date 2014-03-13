@@ -6,10 +6,7 @@ module CMA
     IN_PAGE_ANCHORS = %r{/?#}
     NEWS_AND_UPDATES     = %r{/news-and-updates}
 
-    # Kind of requires that we set @crawl in the descendants'
-    # #crawl! method, but hey
     attr_reader :crawl
-
     def do_crawl(start_url, options = {})
       Anemone.crawl(start_url, options) do |crawl|
         @crawl = crawl
