@@ -1,11 +1,11 @@
 require 'anemone'
 require 'cma/asset'
-require 'cma/oft/crawler'
+require 'cma/crawler'
 
 module CMA
   module OFT
     module Mergers
-      class Crawler < CMA::OFT::Crawler
+      class Crawler < CMA::Crawler
         CASE_INDEX        = %r{/OFTwork/mergers/Mergers_Cases/?$}
         CASE              = %r{/OFTwork/mergers/Mergers_Cases/20[0-9]{2}/[a-z|A-Z|0-9]+}
         CASE_UNDERTAKINGS = %r{/OFTwork/mergers/register/Initial-undertakings}
@@ -55,8 +55,7 @@ module CMA
         end
 
         def crawl!
-          Anemone.crawl('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases') do |crawl|
-            @crawl = crawl
+          do_crawl('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases') do |crawl|
 
             crawl.on_every_page do |page|
               puts page.url

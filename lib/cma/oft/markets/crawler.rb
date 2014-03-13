@@ -2,12 +2,12 @@ require 'anemone'
 require 'cma/asset'
 require 'cma/oft/markets/case'
 require 'cma/oft/markets/case_list'
-require 'cma/oft/crawler'
+require 'cma/crawler'
 
 module CMA
   module OFT
     module Markets
-      class Crawler < CMA::OFT::Crawler
+      class Crawler < CMA::Crawler
         # Significant things we're parsing
         CASE_INDEX         = %r{/OFTwork/oft-current-cases/?$}
         CASE               = %r{
@@ -52,8 +52,7 @@ module CMA
         end
 
         def crawl!
-          Anemone.crawl('http://oft.gov.uk/OFTwork/oft-current-cases/') do |crawl|
-            @crawl = crawl
+          do_crawl('http://oft.gov.uk/OFTwork/oft-current-cases/') do |crawl|
 
             crawl.on_every_page do |page|
               puts "#{page.url} <- #{page.referer}"
