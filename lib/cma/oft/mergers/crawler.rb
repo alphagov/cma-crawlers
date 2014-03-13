@@ -1,3 +1,4 @@
+require 'anemone'
 require 'cma/asset'
 require 'cma/oft/crawler'
 

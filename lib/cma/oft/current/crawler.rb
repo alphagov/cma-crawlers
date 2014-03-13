@@ -1,3 +1,4 @@
+require 'anemone'
 require 'cma/asset'
 require 'cma/oft/competition/case'
 require 'cma/oft/competition/case_list'
@@ -7,7 +8,7 @@ require 'cma/oft/crawler'
 
 module CMA
   module OFT
-    module Competition
+    module Current
       class Crawler < CMA::OFT::Crawler
         # Significant things we're parsing
         CASE_INDEX         = %r{/OFTwork/oft-current-cases/?$}

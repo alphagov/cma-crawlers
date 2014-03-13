@@ -2,7 +2,6 @@
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
-require 'anemone'
 require 'cma/oft/mergers/case_list'
 require 'cma/oft/mergers/crawler'
 
