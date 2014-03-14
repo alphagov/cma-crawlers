@@ -20,6 +20,10 @@ module CMA
       @original_urls ||= Set.new([original_url].compact)
     end
 
+    def original_urls=(value)
+      @original_urls = Set.new(value)
+    end
+
     def base_name
       @base_name ||= CaseStore.base_name(original_url)
     end

@@ -15,6 +15,7 @@ module CMA
           c.title = 'test_title'
           c.sector = 'test_sector'
           c.original_url = 'http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits'
+          c.original_urls << 'http://oft.gov.uk/somewhere/special'
 
           c.assets << CMA::Asset.new('http://1', c, '1234', 'text/plain')
         end
@@ -59,10 +60,16 @@ module CMA
       describe 'loading the case' do
         subject { CaseStore.instance.load(expected_filename) }
 
-        it                 { should be_an(OFT::Mergers::Case) }
-        its(:title)        { should eql('test_title') }
-        its(:sector)       { should eql('test_sector') }
-        its(:original_url) { should eql('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits') }
+        it                  { should be_an(OFT::Mergers::Case) }
+        its(:title)         { should eql('test_title') }
+        its(:sector)        { should eql('test_sector') }
+        its(:original_url)  { should eql('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits') }
+        its(:original_urls) {
+          should eql Set.new(%w(
+            http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits
+            http://oft.gov.uk/somewhere/special
+          ))
+        }
       end
 
       describe 'finding the case by URL' do
