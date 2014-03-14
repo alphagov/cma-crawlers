@@ -27,7 +27,6 @@ module CMA
 
         # Things we're skipping
         CASE_LISTS_BY_YEAR = %r{/OFTwork/oft-current-cases/[a-z|-]+-20[0-9]{2}/?$}
-        NEWS_AND_UPDATES   = %r{/news-and-updates}
         ABOUT_THE_OFT      = %r{/about-the-oft}
         SHARED_OFT         = %r{/shared_oft}
         BUSINESS_ADVICE    = %r{/business-advice}

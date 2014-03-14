@@ -3,6 +3,7 @@ module CMA
     class Crawler
       MAILTO_LINKS         = %r{mailto:}
       IN_PAGE_ANCHORS      = %r{/?#}
+      NEWS_AND_UPDATES     = %r{/news-and-updates}
 
       # Kind of requires that we set @crawl in the descendants'
       # #crawl! method, but hey

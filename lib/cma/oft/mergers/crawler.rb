@@ -20,6 +20,7 @@ module CMA
           MERGERS_INDEX_PAGES,
           MERGERS_FILTER_PAGES,
           MERGERS_FTA,
+          NEWS_AND_UPDATES,
           MAILTO_LINKS,
           IN_PAGE_ANCHORS
         ]
