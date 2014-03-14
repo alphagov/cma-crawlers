@@ -30,7 +30,7 @@ module CMA
             self.body = Kramdown::Document.new(
               body_copy.inner_html.to_s,
               input: 'html'
-            ).to_kramdown
+            ).to_kramdown.gsub(/\{:.+?}/m, '')
 
             save!
           end
