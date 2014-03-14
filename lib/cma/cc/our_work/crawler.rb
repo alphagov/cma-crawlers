@@ -31,7 +31,7 @@ module CMA
               c.add_markdown_detail(page.doc, Case.attr_for_url(page.url))
             end
           when page_url =~ ASSET
-            with_nearest_case_matching(page.referer, CASE, page_url) do |_case|
+            with_nearest_case_matching(page.referer, CASE) do |_case|
               asset = CMA::Asset.new(page.url.to_s, _case, page.body, page.headers['content-type'].first)
               asset.save!
               _case.assets << asset
