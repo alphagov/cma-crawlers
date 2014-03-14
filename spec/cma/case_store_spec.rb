@@ -50,6 +50,10 @@ module CMA
           CaseStore.instance.load_class('_output/OFTwork-oft-current-cases-market-studies-2012-personal-current-accounts.json').
             should == CMA::OFT::Markets::Case
         end
+        it 'loads a CC case for a CC URL' do
+          CaseStore.instance.load_class('_output/our-work-directory-of-all-inquiries-aggregates-cement-ready-mix-concrete.json').
+            should == CMA::CC::OurWork::Case
+        end
       end
 
       describe 'loading the case' do
