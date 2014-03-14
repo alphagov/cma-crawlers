@@ -17,7 +17,7 @@ module CMA
           describe 'the first case' do
             subject { cases.first }
 
-            its(:original_url) { should eql('/our-work/directory-of-all-inquiries/aggregates-cement-ready-mix-concrete') }
+            its(:original_url) { should eql('http://www.competition-commission.org.uk/our-work/directory-of-all-inquiries/aggregates-cement-ready-mix-concrete') }
             its(:title)        { should eql('Aggregates, cement and ready-mix concrete') }
           end
 

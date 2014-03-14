@@ -1,4 +1,5 @@
 require 'anemone'
+require 'cma/case_store'
 
 module CMA
   class Crawler
