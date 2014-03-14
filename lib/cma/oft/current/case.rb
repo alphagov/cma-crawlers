@@ -21,6 +21,7 @@ module CMA
             %w(
               //table/@*
               //a/@target
+              //a[@name]
               //comment()
             ).each do |superfluous_nodes|
               body_copy.xpath(superfluous_nodes).each(&:unlink)
