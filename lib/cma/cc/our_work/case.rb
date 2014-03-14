@@ -80,8 +80,6 @@ module CMA
               markup.inner_html.to_s,
               input: 'html'
             ).to_kramdown
-
-            save!
           end
         end
 

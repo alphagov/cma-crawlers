@@ -32,7 +32,7 @@ module CMA
           when page_url =~ CASE_INDEX
             CMA::OFT::Markets::CaseList.from_html(page.doc).save!
           when page_url =~ CASE
-            with_case(page.url) do |_case|
+            with_case(page.url, page_url) do |_case|
               _case.add_summary(page.doc)
             end
           when page_url =~ CASE_DETAIL
@@ -40,7 +40,7 @@ module CMA
               _case.add_detail(page.doc)
             end
           when page_url =~ ASSET
-            with_nearest_case_matching(page.referer, CASE, page.referer) do |_case|
+            with_nearest_case_matching(page.referer, CASE) do |_case|
               asset = CMA::Asset.new(page.url.to_s, _case, page.body, page.headers['content-type'].first)
               asset.save!
               _case.assets << asset

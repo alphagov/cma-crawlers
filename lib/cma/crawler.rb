@@ -20,6 +20,7 @@ module CMA
       if _case
         _case.original_urls << from.to_s if from
         yield _case
+        _case.save!
       else
         puts "*** WARN: case for #{url} not found"
       end

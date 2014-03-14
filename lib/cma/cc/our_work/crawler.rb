@@ -23,7 +23,7 @@ module CMA
           when page_url =~ CASE_INDEX
             CMA::CC::OurWork::CaseList.from_html(page.doc).save!
           when page_url =~ CASE
-            with_case(page_url) do |c|
+            with_case(page_url, page_url) do |c|
               c.add_case_detail(page.doc)
             end
           when page_url =~ SUBPAGE

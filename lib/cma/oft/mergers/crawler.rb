@@ -31,7 +31,7 @@ module CMA
           when page_url =~ CASE_INDEX
             CMA::OFT::Mergers::CaseList.from_html(page.doc).save!
           when page_url =~ CASE
-            with_case(page.url) do |_case|
+            with_case(page.url, page_url) do |_case|
               _case.add_details_from_case(page.doc, :invitation_to_comment)
             end
           when page_url =~ CASE_UNDERTAKINGS

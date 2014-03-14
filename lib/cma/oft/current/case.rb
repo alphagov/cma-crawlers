@@ -9,7 +9,6 @@ module CMA
 
         def add_summary(doc)
           self.summary = doc.at_xpath('//div[@class="intro"]/p[2]').content
-          save!
         end
 
         def add_detail(doc)
@@ -31,8 +30,6 @@ module CMA
               body_copy.inner_html.to_s,
               input: 'html'
             ).to_kramdown.gsub(/\{:.+?}/m, '')
-
-            save!
           end
         end
 
