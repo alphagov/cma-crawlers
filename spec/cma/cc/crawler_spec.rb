@@ -16,6 +16,11 @@ module CMA::CC::OurWork
         'http://www.competition-commission.org.uk/assets/anything.pdf'.
         should match(Crawler::ASSET)
       end
+      specify do
+        'http://www.competition-commission.org.uk/our-work/directory-of-all-inquiries/aggregates-cement-ready-mix-concrete/news-releases'.
+        should match(Crawler::SUBPAGE)
+      end
+
     end
   end
 end

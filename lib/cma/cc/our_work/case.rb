@@ -8,13 +8,16 @@ module CMA
 
         # body types that will need body generation/ordering later
         attr_accessor :core_documents,
+                      :undertakings_and_order,
                       :annotated_issues_statement,
                       :news_releases_and_announcements,
+                      :news_releases,
                       :analysis,
                       :evidence,
                       :provisional_findings_report,
                       :final_report,
-                      :provisional_final_report
+                      :provisional_final_report,
+                      :remittal
 
         def case_type
           'unknown'

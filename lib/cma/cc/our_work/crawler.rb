@@ -46,7 +46,7 @@ module CMA
         # Context-sensitive set of links per page
         def link_nodes_for(page)
           nodes  = page.doc.css('#mainColumn a')
-          nodes += page.doc.css('#leftNavigation a') if page.url =~ SUBPAGE
+          nodes += page.doc.css('#leftNavigation a') if [CASE, SUBPAGE].any? {|type| page.url.to_s =~ type}
           nodes
         end
 
@@ -58,7 +58,7 @@ module CMA
           do_crawl('http://www.competition-commission.org.uk/our-work') do |crawl|
 
             crawl.on_every_page do |page|
-              puts "#{page.url} <- #{page.referer}"
+              puts "#{page.url}#{'<- ' if page.referer}#{page.referer}"
               create_or_update_content_for(page)
             end
 
