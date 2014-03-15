@@ -6,10 +6,10 @@ module CMA
   module CC
     module OurWork
       class Crawler < CMA::Crawler
-        CASE_INDEX = %r{/our-work/?$}
-        CASE       = %r{/our-work/directory-of-all-inquiries/[a-z|A-Z|0-9|-]+$}
-        SUBPAGE    = %r{/our-work/directory-of-all-inquiries/[a-z|A-Z|0-9|-]+/[a-z|A-Z|0-9|-]+/?$}
-        ASSET      = %r{/assets/.*\.pdf$}
+        CASE_INDEX        = %r{/our-work/?$}
+        CASE              = %r{/our-work/directory-of-all-inquiries/[a-z|A-Z|0-9|-]+$}
+        SUBPAGE           = %r{/our-work/directory-of-all-inquiries/[a-z|A-Z|0-9|-]+/[a-z|A-Z|0-9|-]+(?:/[a-z|A-Z|0-9|-]+)?/?$}
+        ASSET             = %r{/assets/.*\.pdf$}
 
         INTERESTED_ONLY_IN = [
           CASE,
@@ -28,7 +28,7 @@ module CMA
             end
           when page_url =~ SUBPAGE
             with_nearest_case_matching(page.referer, CASE, page_url) do |c|
-              c.add_markdown_detail(page.doc, Case.attr_for_url(page.url))
+              c.add_markdown_detail(page.doc, case_relative_path(page_url))
             end
           when page_url =~ ASSET
             with_nearest_case_matching(page.referer, CASE) do |_case|
@@ -38,15 +38,28 @@ module CMA
               _case.save!
             end
           else
-            puts "WARN: Skipping #{page.url}"
+            puts "WARN: Skipping #{page_url}"
           end
+        end
+
+        SUBPAGE_PARSE = %r{/our-work/directory-of-all-inquiries/[a-z|A-Z|0-9|-]+/([a-z|A-Z|0-9|-]+(/[a-z|A-Z|0-9|-]+)?)/?$}
+        ##
+        # Given a URL like http://cc.org.uk/our-work/directory-of-all-inquiries/aggregates/some-page/another-page,
+        # return a path relative to the case, like some-page/another-page,
+        # or raise +ArgumentError+ if the URL is not for a SUBPAGE
+        def case_relative_path(url)
+          url = url.to_s
+          raise ArgumentError unless url =~ SUBPAGE_PARSE
+          $1.downcase
         end
 
         ##
         # Context-sensitive set of links per page
         def link_nodes_for(page)
           nodes  = page.doc.css('#mainColumn a')
-          nodes += page.doc.css('#leftNavigation a') if [CASE, SUBPAGE].any? {|type| page.url.to_s =~ type}
+          if [CASE, SUBPAGE].any? { |match| page.url.to_s =~ match }
+            nodes += page.doc.css('#leftNavigation a')
+          end
           nodes
         end
 

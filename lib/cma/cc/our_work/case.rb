@@ -7,17 +7,10 @@ module CMA
         attr_accessor :date_of_referral, :statutory_deadline
 
         # body types that will need body generation/ordering later
-        attr_accessor :core_documents,
-                      :undertakings_and_order,
-                      :annotated_issues_statement,
-                      :news_releases_and_announcements,
-                      :news_releases,
-                      :analysis,
-                      :evidence,
-                      :provisional_findings_report,
-                      :final_report,
-                      :provisional_final_report,
-                      :remittal
+        attr_writer :markup_sections
+        def markup_sections
+          @markup_sections ||= {}
+        end
 
         def case_type
           'unknown'
@@ -30,7 +23,7 @@ module CMA
           self.statutory_deadline = parse_date_at_xpath(
             doc, [possible_date_position_1(3), possible_date_position_2(3)])
 
-          add_markdown_detail(doc, :core_documents)
+          add_markdown_detail(doc, 'core_documents')
         end
 
         # Dates could be here
@@ -43,7 +36,7 @@ module CMA
           "//div[@id='mainColumn']/h1/following-sibling::div/p[1]/text()[#{index}]"
         end
 
-        def add_markdown_detail(doc, attr)
+        def add_markdown_detail(doc, markup_sections_path)
           doc.dup.at_css('#mainColumn').tap do |markup|
             # Simple stuff
             %w(div img hr script ul#pageOptions a#accesskey-skip).each { |tag| markup.css(tag).remove }
@@ -78,11 +71,11 @@ module CMA
               strong.content = strong.content.strip
             end
 
-            setter = (attr.to_s + '=').to_sym
-            send setter, Kramdown::Document.new(
-              markup.inner_html.to_s,
-              input: 'html'
-            ).to_kramdown.gsub(/\{:.+?}/m, '')
+            markup_sections[markup_sections_path] =
+              Kramdown::Document.new(
+                markup.inner_html.to_s,
+                input: 'html'
+              ).to_kramdown.gsub(/\{:.+?}/m, '')
           end
         end
 
@@ -98,21 +91,6 @@ module CMA
             c.original_url = File.join(BASE_URI, node['href'])
             c.title = node.text
           end
-        end
-
-        ##
-        # Return the attr that a particular URL should be setting markdown for
-        def self.attr_for_url(uri)
-          uri = URI.parse(uri) unless uri.is_a?(URI)
-
-          paths = uri.path.split('/')
-          raise ArgumentError, "#{uri.path} not a case subpage" if
-            paths[2] != 'directory-of-all-inquiries' || paths.length <= 3
-          paths.slice!(0..3)
-
-          paths.length == 2 ?
-            [paths.first.underscore.to_sym, paths.last] :
-            paths.first.underscore.to_sym
         end
       end
     end

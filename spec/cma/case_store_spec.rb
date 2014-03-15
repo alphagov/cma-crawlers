@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'cma/oft/mergers/case'
 require 'cma/oft/competition/case'
 require 'cma/oft/consumer/case'
+require 'cma/cc/our_work/case'
 require 'cma/case_store'
 require 'cma/asset'
 require 'fileutils'
@@ -69,6 +70,29 @@ module CMA
             http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits
             http://oft.gov.uk/somewhere/special
           ))
+        }
+      end
+
+      describe 'hanging onto markup sections' do
+        let(:_case) do
+          CC::OurWork::Case.new.tap do |c|
+            c.original_url = 'http://cc.org/our-work/directory-of-all-inquiries/aggregates'
+            c.markup_sections['core_documents'] = '# Hi'
+            c.markup_sections['evidence/stuff'] = '# Hi'
+          end
+        end
+
+        before { _case.save! }
+
+        subject do
+          CaseStore.instance.load(File.join('spec/fixtures/store', _case.filename))
+        end
+
+        its(:markup_sections) {
+          should eql({
+            'core_documents' => '# Hi',
+            'evidence/stuff' => '# Hi'
+          })
         }
       end
 
