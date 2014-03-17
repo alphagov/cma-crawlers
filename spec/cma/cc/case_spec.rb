@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'cma/cc/our_work/case'
 require 'cma/asset'
 require 'cma/case_store'
+require 'kramdown/converter/kramdown_patched'
 
 module CMA
   module CC
@@ -93,10 +94,16 @@ HTML
             should_not include('* * *')
           end
           it 'has list items that are rewritten links' do
-            subject.should include '* [Terms of reference (PDF, 13 Kb)][1]'
-            subject.should include
-              '[1]: http://www.competition-commission.org.uk'\
-              '/assets/competitioncommission/docs/2012/aggregates-cement-and-ready-mix-concrete/agg_terms_of_reference.pdf'
+            subject.should include('* [Terms of reference (PDF, 13')
+            subject.should include(
+            'Kb)](http://www.competition-commission.org.uk'\
+              '/assets/competitioncommission/docs/2012/aggregates-cement-and-ready-mix-concrete'\
+              '/agg_terms_of_reference.pdf'
+            )
+          end
+
+          it 'does not have links in the reference style' do
+            subject.should_not include '[1]: http://'
           end
 
           it_behaves_like 'it has no markup or fluff'

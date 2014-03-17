@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'anemone'
-gem 'kramdown'
+gem 'kramdown', '1.3.2'
 gem 'nokogiri'
 gem 'activemodel'
 

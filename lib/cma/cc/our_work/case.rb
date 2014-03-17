@@ -1,4 +1,5 @@
 require 'cma/markup_helpers'
+require 'kramdown/converter/kramdown_patched'
 
 module CMA
   module CC
