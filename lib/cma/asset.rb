@@ -38,5 +38,17 @@ module CMA
       FileUtils.mkdir_p(asset_dir)
       File.write("#{asset_dir}/#{filename}", content)
     end
+
+    def ==(other)
+      eql?(other)
+    end
+
+    def eql?(other)
+      hash == other.hash
+    end
+
+    def hash
+      original_url.hash
+    end
   end
 end

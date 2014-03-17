@@ -9,7 +9,6 @@ module CMA
 
         def add_summary(doc)
           self.summary = doc.at_xpath('//div[@class="intro"]/p[2]').content
-          save!
         end
 
         def add_detail(doc)
@@ -21,6 +20,7 @@ module CMA
             %w(
               //table/@*
               //a/@target
+              //a[@name]
               //comment()
             ).each do |superfluous_nodes|
               body_copy.xpath(superfluous_nodes).each(&:unlink)
@@ -29,9 +29,7 @@ module CMA
             self.body = Kramdown::Document.new(
               body_copy.inner_html.to_s,
               input: 'html'
-            ).to_kramdown
-
-            save!
+            ).to_kramdown.gsub(/\{:.+?}/m, '')
           end
         end
 

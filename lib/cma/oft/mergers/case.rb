@@ -19,9 +19,7 @@ module CMA
             send setter, Kramdown::Document.new(
               intro.inner_html.to_s,
               input: 'html'
-            ).to_kramdown
-
-            save!
+            ).to_kramdown.gsub(/\{:.+?}/m, '')
           end
         end
 

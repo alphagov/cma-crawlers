@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'cma/oft/mergers/case'
 require 'cma/oft/competition/case'
 require 'cma/oft/consumer/case'
+require 'cma/cc/our_work/case'
 require 'cma/case_store'
 require 'cma/asset'
 require 'fileutils'
@@ -15,8 +16,11 @@ module CMA
           c.title = 'test_title'
           c.sector = 'test_sector'
           c.original_url = 'http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits'
+          c.original_urls << 'http://oft.gov.uk/somewhere/special'
 
           c.assets << CMA::Asset.new('http://1', c, '1234', 'text/plain')
+          c.assets << CMA::Asset.new('http://1', c, '1234', 'text/plain')
+          c.assets << CMA::Asset.new('http://2', c, '1234', 'text/plain')
         end
       end
 
@@ -50,15 +54,59 @@ module CMA
           CaseStore.instance.load_class('_output/OFTwork-oft-current-cases-market-studies-2012-personal-current-accounts.json').
             should == CMA::OFT::Markets::Case
         end
+        it 'loads a CC case for a CC URL' do
+          CaseStore.instance.load_class('_output/our-work-directory-of-all-inquiries-aggregates-cement-ready-mix-concrete.json').
+            should == CMA::CC::OurWork::Case
+        end
       end
 
       describe 'loading the case' do
-        subject { CaseStore.instance.load(expected_filename) }
+        subject(:loaded_case) { CaseStore.instance.load(expected_filename) }
 
-        it                 { should be_an(OFT::Mergers::Case) }
-        its(:title)        { should eql('test_title') }
-        its(:sector)       { should eql('test_sector') }
-        its(:original_url) { should eql('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits') }
+        it                  { should be_an(OFT::Mergers::Case) }
+        its(:title)         { should eql('test_title') }
+        its(:sector)        { should eql('test_sector') }
+        its(:original_url)  { should eql('http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits') }
+        its(:original_urls) {
+          should eql Set.new(%w(
+            http://oft.gov.uk/OFTwork/mergers/Mergers_Cases/2013/DiageoUnitedSpirits
+            http://oft.gov.uk/somewhere/special
+          ))
+        }
+
+        describe 'the loaded assets' do
+          subject { loaded_case.assets }
+          it { should be_a(Set) }
+          it { should have(2).assets }
+          its(:first) { should be_a(CMA::Asset) }
+
+          it 'does not duplicate the assets' do
+            subject.to_a.map(&:original_url).should =~ %w(http://1 http://2)
+          end
+        end
+      end
+
+      describe 'hanging onto markup sections' do
+        let(:_case) do
+          CC::OurWork::Case.new.tap do |c|
+            c.original_url = 'http://cc.org/our-work/directory-of-all-inquiries/aggregates'
+            c.markup_sections['core_documents'] = '# Hi'
+            c.markup_sections['evidence/stuff'] = '# Hi'
+          end
+        end
+
+        before { _case.save! }
+
+        subject do
+          CaseStore.instance.load(File.join('spec/fixtures/store', _case.filename))
+        end
+
+        its(:markup_sections) {
+          should eql({
+            'core_documents' => '# Hi',
+            'evidence/stuff' => '# Hi'
+          })
+        }
       end
 
       describe 'finding the case by URL' do

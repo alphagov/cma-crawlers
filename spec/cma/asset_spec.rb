@@ -25,7 +25,7 @@ describe CMA::Asset do
     end
 
     it 'has content' do
-      asset.content.length.should == 111026
+      asset.content.should == "Dummy content\n"
     end
 
     its(:content_type)   { should eql('application/pdf') }
@@ -38,6 +38,24 @@ describe CMA::Asset do
         'content_type' => 'application/pdf',
         'filename'     => 'case-base-name/APS-letter.pdf'
       })
+    end
+
+    describe 'equality' do
+      let(:other_with_same_url) { CMA::Asset.new('http://some.asset/APS-letter.pdf', nil, nil, nil) }
+      let(:other_with_diff_url) { CMA::Asset.new('http://some.asset/APS-letter2.pdf', nil, nil, nil) }
+
+      it 'is equal to the first' do
+        asset.should eql(other_with_same_url)
+        asset.should == other_with_same_url
+      end
+      it 'is different to the second' do
+        asset.should_not eql(other_with_diff_url)
+        asset.should_not == other_with_diff_url
+      end
+      describe 'works in a Set' do
+        subject { Set.new([asset, other_with_same_url, other_with_diff_url]).to_a }
+        it      { should =~ [asset, other_with_diff_url] }
+      end
     end
 
     describe 'saving' do
