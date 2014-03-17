@@ -1,4 +1,5 @@
 require 'cma/crawler'
+require 'cma/asset'
 
 module CMA
   module OFT
@@ -10,9 +11,9 @@ module CMA
       MARKETS_WORK = %r{/OFTwork/markets-work/(?!references/?$)(?:references/)?([a-zA-Z0-9\-/]+)/?$}
       MERGERS_WORK = %r{/OFTwork/mergers/(?:Mergers_Cases|decisions)/([a-zA-Z0-9\-/]+)/?$}
       UNDERTAKINGS = %r{/OFTwork/mergers/register/Initial-undertakings}
-      ASSET        = %r{/OFTwork/shared_oft/.*\.pdf}
+      ASSET        = %r{/shared_oft/.*\.pdf}
 
-      INTERESTED_ONLY_IN = [MERGERS_WORK, MARKETS_WORK, ASSET]
+      INTERESTED_ONLY_IN = [MERGERS_WORK, MARKETS_WORK, UNDERTAKINGS, ASSET]
 
       def initialize(cc_case)
         @cc_case = cc_case
