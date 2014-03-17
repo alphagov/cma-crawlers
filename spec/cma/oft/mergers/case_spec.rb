@@ -120,19 +120,13 @@ module CMA
 
             before { assets.each { |a| _case.assets << a } }
 
-            it 'serializes the asset to JSON' do
+            it 'serializes the asset to JSON with no duplicates' do
               JSON.load(_case.to_json)['assets'].should eql(
                 [{
                    'original_url' => 'http://some.asset/name.pdf',
                    'content_type' => 'application/pdf',
                    'filename'     => 'OFTwork-mergers-Mergers_Cases-2013-Alliance/name.pdf'
-                 },
-                 {
-                   'original_url' =>
-                     'http://some.asset/name.pdf',
-                   'content_type' => 'application/pdf',
-                   'filename'     => 'OFTwork-mergers-Mergers_Cases-2013-Alliance/name.pdf' }
-                ]
+                 }]
               )
             end
           end

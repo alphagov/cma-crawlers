@@ -19,6 +19,8 @@ module CMA
           c.original_urls << 'http://oft.gov.uk/somewhere/special'
 
           c.assets << CMA::Asset.new('http://1', c, '1234', 'text/plain')
+          c.assets << CMA::Asset.new('http://1', c, '1234', 'text/plain')
+          c.assets << CMA::Asset.new('http://2', c, '1234', 'text/plain')
         end
       end
 
@@ -59,7 +61,7 @@ module CMA
       end
 
       describe 'loading the case' do
-        subject { CaseStore.instance.load(expected_filename) }
+        subject(:loaded_case) { CaseStore.instance.load(expected_filename) }
 
         it                  { should be_an(OFT::Mergers::Case) }
         its(:title)         { should eql('test_title') }
@@ -71,6 +73,17 @@ module CMA
             http://oft.gov.uk/somewhere/special
           ))
         }
+
+        describe 'the loaded assets' do
+          subject { loaded_case.assets }
+          it { should be_a(Set) }
+          it { should have(2).assets }
+          its(:first) { should be_a(CMA::Asset) }
+
+          it 'does not duplicate the assets' do
+            subject.to_a.map(&:original_url).should =~ %w(http://1 http://2)
+          end
+        end
       end
 
       describe 'hanging onto markup sections' do

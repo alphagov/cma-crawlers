@@ -129,13 +129,7 @@ module CMA
                    'original_url' => 'http://some.asset/name.pdf',
                    'content_type' => 'application/pdf',
                    'filename'     => 'OFTwork-oft-current-cases-competition-case-list-2005-interchage-fees-mastercard/name.pdf'
-                 },
-                 {
-                   'original_url' =>
-                     'http://some.asset/name.pdf',
-                   'content_type' => 'application/pdf',
-                   'filename'     => 'OFTwork-oft-current-cases-competition-case-list-2005-interchage-fees-mastercard/name.pdf' }
-                ]
+                }]
               )
             end
           end

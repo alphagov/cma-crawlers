@@ -10,10 +10,19 @@ module CMA
 
     attr_accessor :title, :sector, :original_url
 
-    attr_writer :assets
-
     def assets
-      @assets ||= []
+      @assets ||= Set.new
+    end
+
+    def assets=(array)
+      @assets = Set.new(array.map do |v|
+        Asset.new(
+          v['original_url'],
+          self,
+          nil,
+          v['content-type']
+        )
+      end)
     end
 
     def original_urls

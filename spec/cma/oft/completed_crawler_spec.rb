@@ -18,7 +18,7 @@ module CMA::OFT
       end
       example 'asset' do
         'http://www.oft.gov.uk/shared_oft/market-studies/oft1358ref.pdf'.
-          should_not match(CompletedCrawler::ASSET)
+          should match(CompletedCrawler::ASSET)
       end
     end
   end
