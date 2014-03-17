@@ -36,6 +36,28 @@ module CMA
           "//div[@id='mainColumn']/h1/following-sibling::div/p[1]/text()[#{index}]"
         end
 
+        def add_oft_content(markup_sections_key, doc)
+          doc.dup.at_css('.body-copy').tap do |body_copy|
+            %w(div span script p.backtotop p.previouspage).each do |selector|
+              body_copy.css(selector).remove
+            end
+
+            %w(
+              //table/@*
+              //a/@target
+              //a[@name]
+              //comment()
+            ).each do |superfluous_nodes|
+              body_copy.xpath(superfluous_nodes).each(&:unlink)
+            end
+
+            markup_sections[markup_sections_key] = Kramdown::Document.new(
+              body_copy.inner_html.to_s,
+              input: 'html'
+            ).to_kramdown.gsub(/\{:.+?}/m, '')
+          end
+        end
+
         def add_markdown_detail(doc, markup_sections_path)
           doc.dup.at_css('#mainColumn').tap do |markup|
             # Simple stuff
