@@ -20,7 +20,7 @@ module CMA
           v['original_url'],
           self,
           nil,
-          v['content-type']
+          v['content_type']
         )
       end)
     end

@@ -83,6 +83,10 @@ module CMA
           it 'does not duplicate the assets' do
             subject.to_a.map(&:original_url).should =~ %w(http://1 http://2)
           end
+
+          it 'does not lose content_types' do
+            subject.to_a.first.content_type.should == 'text/plain'
+          end
         end
       end
 
