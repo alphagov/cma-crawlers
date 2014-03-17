@@ -86,9 +86,11 @@ HTML
           it 'has no ruler' do
             should_not include('* * *')
           end
-          it 'has list items that are links' do
-            subject.should include '* [Terms of reference (PDF, 13'
-            subject.should include '(/assets/competitioncommission/docs/2012/aggregates-cement-and-ready-mix-concrete/agg_terms_of_reference.pdf)'
+          it 'has list items that are rewritten links' do
+            subject.should include '* [Terms of reference (PDF, 13 Kb)][1]'
+            subject.should include
+              '[1]: http://www.competition-commission.org.uk'\
+              '/assets/competitioncommission/docs/2012/aggregates-cement-and-ready-mix-concrete/agg_terms_of_reference.pdf'
           end
 
           it_behaves_like 'it has no markup or fluff'

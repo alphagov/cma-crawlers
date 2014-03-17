@@ -1,3 +1,5 @@
+require 'cma/markup_helpers'
+
 module CMA
   module CC
     module OurWork
@@ -51,6 +53,8 @@ module CMA
               body_copy.xpath(superfluous_nodes).each(&:unlink)
             end
 
+            body_copy.make_relative_links_absolute!(CMA::OFT::BASE_URI)
+
             markup_sections[markup_sections_key] = Kramdown::Document.new(
               body_copy.inner_html.to_s,
               input: 'html'
@@ -79,6 +83,8 @@ module CMA
             ).each do |superfluous_nodes|
               markup.xpath(superfluous_nodes).each(&:unlink)
             end
+
+            markup.make_relative_links_absolute!(BASE_URI)
 
             # Move text in leftover spans that were .mediaLinkText
             # to the link as a parent
