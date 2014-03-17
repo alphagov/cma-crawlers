@@ -22,8 +22,8 @@ module CMA
 
     attr_accessor :location
 
-    def initialize
-      self.location = DEFAULT_LOCATION
+    def initialize(location = DEFAULT_LOCATION)
+      self.location = location
     end
 
     def save(_case)

@@ -3,12 +3,13 @@ require 'kramdown'
 require 'uri'
 require 'active_model'
 require 'set'
+require 'cma/asset'
 
 module CMA
   class Case
     include ActiveModel::Serializers::JSON
 
-    attr_accessor :title, :sector, :original_url
+    attr_accessor :title, :sector, :original_url, :body
 
     def assets
       @assets ||= Set.new

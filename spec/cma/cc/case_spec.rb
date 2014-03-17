@@ -14,6 +14,7 @@ module CMA
           OurWork::Case.new.tap do |c|
             c.title         = 'original'
             c.original_url  = 'http://www.competition-commission.org.uk/our-work/directory-of-all-inquiries/aggregates-cement-ready-mix-concrete'
+            c.body          = '# Hi'
           end
         end
 
@@ -74,6 +75,7 @@ HTML
               subject { CaseStore.instance.load("spec/fixtures/store/#{_case.filename}") }
 
               its(:markup_sections) { should be_a(Hash) }
+              its(:body)            { should be_a(String)}
             end
           end
         end
