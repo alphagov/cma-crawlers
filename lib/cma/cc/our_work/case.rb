@@ -65,7 +65,7 @@ module CMA
         def add_markdown_detail(doc, markup_sections_path)
           doc.dup.at_css('#mainColumn').tap do |markup|
             # Simple stuff
-            %w(div img hr script ul#pageOptions a#accesskey-skip).each { |tag| markup.css(tag).remove }
+            %w(div img script ul#pageOptions a#accesskey-skip).each { |tag| markup.css(tag).remove }
 
             # Stuff CSS can't handle, and stuff Kramdown can't either
             %w(
@@ -85,6 +85,8 @@ module CMA
             end
 
             markup.make_relative_links_absolute!(BASE_URI)
+
+            markup.xpath('.//h2[1]/preceding-sibling::*').each(&:remove)
 
             # Move text in leftover spans that were .mediaLinkText
             # to the link as a parent

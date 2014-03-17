@@ -80,8 +80,14 @@ HTML
         describe 'core documents markup' do
           subject { _case.markup_sections['core_documents'] }
 
-          it 'has the header' do
-            subject.should include('# Aggregates, cement and ready-mix concrete market investigation')
+          it 'has stripped the original header' do
+            subject.should_not include('# Aggregates, cement and ready-mix concrete market investigation')
+          end
+          it 'puts the secondary header at the top' do
+            subject.should match /^## Core documents/
+          end
+          it 'strips the dates' do
+            subject.should_not include "**Date of referral:**18.01.12 **Statutory deadline:**17.01.14\n\n**Email:"
           end
           it 'has no ruler' do
             should_not include('* * *')
