@@ -22,7 +22,7 @@ module CMA
       def create_or_update_content_for(page)
         page_url = page.url.to_s
 
-        @cc_case.original_urls << page_url
+        @cc_case.original_urls << page_url unless page_url =~ ASSET
         case
         when page_url =~ MARKETS_WORK
           @cc_case.add_oft_content($1.gsub(%r{/$}, ''), page.doc, '.body-copy')
