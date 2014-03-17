@@ -9,7 +9,7 @@ module CMA
     # mergers, which is all it's interested in
     class CompletedCrawler < CMA::Crawler
       MARKETS_WORK = %r{/OFTwork/markets-work/(?!references/?$)(?:references/)?([a-zA-Z0-9\-/]+)/?$}
-      MERGERS_WORK = %r{/OFTwork/mergers/(?:Mergers_Cases|decisions)/([a-zA-Z0-9\-/]+)/?$}
+      MERGERS_WORK = %r{/OFTwork/mergers/((Mergers_Cases|decisions)/[a-zA-Z0-9\-/]+)/?$}
       UNDERTAKINGS = %r{/OFTwork/mergers/register/Initial-undertakings}
       ASSET        = %r{/shared_oft/.*\.pdf}
 
