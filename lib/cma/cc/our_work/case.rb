@@ -36,8 +36,8 @@ module CMA
           "//div[@id='mainColumn']/h1/following-sibling::div/p[1]/text()[#{index}]"
         end
 
-        def add_oft_content(markup_sections_key, doc)
-          doc.dup.at_css('.body-copy').tap do |body_copy|
+        def add_oft_content(markup_sections_key, doc, body_selector)
+          doc.dup.at_css(body_selector).tap do |body_copy|
             %w(div span script p.backtotop p.previouspage).each do |selector|
               body_copy.css(selector).remove
             end

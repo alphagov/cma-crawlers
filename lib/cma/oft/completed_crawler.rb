@@ -25,11 +25,11 @@ module CMA
         @cc_case.original_urls << page_url
         case
         when page_url =~ MARKETS_WORK
-          @cc_case.add_oft_content($1.gsub(%r{/$}, ''), page.doc)
+          @cc_case.add_oft_content($1.gsub(%r{/$}, ''), page.doc, '.body-copy')
         when page_url =~ MERGERS_WORK
-          @cc_case.add_oft_content($1.gsub(%r{/$}, ''), page.doc)
+          @cc_case.add_oft_content($1.gsub(%r{/$}, ''), page.doc, '.intro')
         when page_url =~ UNDERTAKINGS
-          @cc_case.add_oft_content('initial-undertakings', page.doc)
+          @cc_case.add_oft_content('initial-undertakings', page.doc, '.intro')
         when page_url =~ ASSET
           asset = CMA::Asset.new(page_url, @cc_case, page.body, page.headers['content-type'].first)
           asset.save!
