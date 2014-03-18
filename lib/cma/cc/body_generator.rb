@@ -18,7 +18,8 @@ module CMA
         _case.body = '## Phase 2\n\n'
 
         _case.body << "\nDate of referral:  #{reformat_date(_case.date_of_referral)}"
-        _case.body << "\nStatutory deadline:  #{reformat_date(_case.statutory_deadline)}\n\n"
+        _case.body <<
+          "\nStatutory deadline:  #{reformat_date(_case.statutory_deadline)}\n\n" if _case.statutory_deadline
 
         append_single_sections(
           %w(
@@ -101,6 +102,7 @@ module CMA
 
       def generate!
         cases.each do |_case|
+          puts "Generating body for #{_case.filename}"
           generate_body_for!(_case)
           case_store.save(_case)
         end
