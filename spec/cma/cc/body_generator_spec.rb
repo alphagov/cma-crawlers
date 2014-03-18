@@ -33,28 +33,29 @@ describe CMA::CC::BodyGenerator do
         case_body.should match /^## Phase 2/
       end
 
-      it 'uses the date of referral and statutory deadline' do
-        pending
+      it 'uses the date of referral' do
+        case_body.should have_content('Date of referral:  18/01/2012').under('## Phase 1')
+      end
+      it 'uses the statutory deadline' do
+        case_body.should have_content('Statutory deadline:  17/01/2014').under('## Phase 1')
       end
 
       it 'puts the CC headers at h3' do
         case_body.should include('### Core documents')
       end
       it 'puts the OFT headers at h3' do
-        pending 'not got that far yet'
-        case_body.should include('###  Aggregates')
+        case_body.should include('### Aggregates')
       end
       it 'excludes the useless analysis page' do
         case_body.should_not include("Analysis\n\n* [Working\n  papers]")
       end
 
       describe 'included useful analysis content' do
-        it { should include('Working Papers are published') }
+        it 'has content under an h3' do
+          should have_content('Working Papers are published').under('### Working papers')
+        end
         it { should include('[Notification of the CC’s intention to carry out case studies') }
         it { should include('[Commentary on the Cement Profitability Analysis') }
-        it 'has set their headers to h3' do
-          case_body.should include('### Working papers')
-        end
       end
 
       describe 'included useful evidence content' do
@@ -68,8 +69,14 @@ describe CMA::CC::BodyGenerator do
         it { should include '[Issues statement news' }
       end
 
-      it 'orders the sections according to spec' do
-        pending 'uhm. What to do about a general text ordering test'
+      describe 'the OFT sections' do
+        it { should include '## Phase 1'}
+        it 'has the reference' do
+          should include '**Date of reference:** 18 January 2012'
+        end
+        it 'has the work summary' do
+          '### Summary of work'
+        end
       end
     end
   end

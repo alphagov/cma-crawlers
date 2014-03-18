@@ -38,9 +38,14 @@ module CMA
         )
 
         append_single_sections(
-          %w(news-releases),
+          %w(
+            news-releases
+            news-releases-announcements
+          ),
           _case
         )
+
+        append_oft_sections(_case)
       end
 
       def append_subsections(subsection_names, _case )
@@ -57,13 +62,40 @@ module CMA
         end
       end
 
+      def append_bodies(_case, bodies, options = { header_offset: 1 })
+        bodies.each do |section_body|
+          Kramdown::Document.new(
+            section_body, header_offset: options[:header_offset]
+          ).tap do |tree|
+            _case.body << tree.to_kramdown
+          end
+        end
+      end
+
       def append_single_sections(section_names, _case)
         bodies = section_names.map { |cc_section_name| _case.markup_sections[cc_section_name] }.compact
 
-        bodies.each do |section_body|
-          Kramdown::Document.new(section_body, header_offset: 1).tap do |tree|
-            _case.body << tree.to_kramdown
-          end
+        append_bodies(_case, bodies)
+      end
+
+
+      def reformat_date(value)
+        Date.strptime(value, '%Y-%m-%d').strftime('%d/%m/%Y')
+      end
+
+      def append_oft_sections(_case)
+        bodies = _case.markup_sections.inject([]) do |bodies, name_content|
+          bodies << name_content.last if name_content.first =~ %r{OFT/}
+          bodies
+        end
+
+        if bodies.any?
+          _case.body << "\n## Phase 1\n"
+
+          _case.body << "\nDate of referral:  #{reformat_date(_case.date_of_referral)}"
+          _case.body << "\nStatutory deadline:  #{reformat_date(_case.statutory_deadline)}\n\n"
+
+          append_bodies(_case, bodies, header_offset: 2)
         end
       end
 
