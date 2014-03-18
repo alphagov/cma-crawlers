@@ -28,7 +28,7 @@ module CMA
             end
           when page_url =~ SUBPAGE
             with_nearest_case_matching(page.referer, CASE, page_url) do |c|
-              c.add_markdown_detail(page.doc, case_relative_path(page_url))
+              c.add_markdown_detail(page.doc, case_relative_path(page_url), url: page_url)
             end
           when page_url =~ ASSET
             with_nearest_case_matching(page.referer, CASE) do |_case|

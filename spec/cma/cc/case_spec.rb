@@ -52,6 +52,20 @@ module CMA
 
               specify { _case.markup_sections['provisional_findings_report'].should_not be_blank }
             end
+
+            context 'Verizon single list item breaking case' do
+              # NoMethodError from Kramdown conversion - was due to
+              # bug in Kramdown thead parsing. Fix by removing thead els (not totally necessary)
+              let(:doc) { Nokogiri::HTML(File.read('spec/fixtures/cc/verizon-vodafone-appeal.html')) }
+
+              before { _case.add_markdown_detail(doc, 'core_documents') }
+
+              subject(:core_documents) { _case.markup_sections['core_documents'] }
+
+              it 'has the first link' do
+                should have_content('Ofcom Business Connectivity').under('## Background information')
+              end
+            end
           end
 
           context 'adding a part of a content bucket URL like .../evidence or .../analysis' do
