@@ -19,6 +19,15 @@ module CMA
 
             its(:original_url) { should eql('http://www.competition-commission.org.uk/our-work/directory-of-all-inquiries/aggregates-cement-ready-mix-concrete') }
             its(:title)        { should eql('Aggregates, cement and ready-mix concrete') }
+            its(:case_type)    { should eql('markets')}
+          end
+
+          describe 'the last case' do
+            subject { cases.cases.last }
+
+            its(:original_url) { should eql('http://www.competition-commission.org.uk/our-work/directory-of-all-inquiries/review-of-ims-health-incorporated-undertakings') }
+            its(:title)        { should eql('Review of IMS Health undertakings') }
+            its(:case_type)    { should eql('review-of-orders-and-undertakings')}
           end
 
           describe 'saving them' do

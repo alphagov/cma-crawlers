@@ -7,16 +7,12 @@ module CMA
       class Case < CMA::Case
         BASE_URI = 'http://www.competition-commission.org.uk'
 
-        attr_accessor :date_of_referral, :statutory_deadline
+        attr_accessor :case_type, :date_of_referral, :statutory_deadline
 
         # body types that will need body generation/ordering later
         attr_writer :markup_sections
         def markup_sections
           @markup_sections ||= {}
-        end
-
-        def case_type
-          'unknown'
         end
 
         def add_case_detail(doc)
@@ -117,10 +113,21 @@ module CMA
           Date.strptime($1, '%d.%m.%y') if xpath
         end
 
+        TITLES_TO_CASE_TYPES = {
+          'Market investigations' => 'markets',
+          'Merger inquiries ' => 'mergers',
+          'Regulatory references and appeals' => 'regulatory-references-and-appeals',
+          'Reviews of Orders and undertakings' => 'review-of-orders-and-undertakings',
+        }
         def self.from_link(node)
           Case.new.tap do |c|
             c.original_url = File.join(BASE_URI, node['href'])
             c.title = node.text
+
+            # Find nearest h3, resolve to case_type
+            c.case_type = TITLES_TO_CASE_TYPES[
+              node.at_xpath('./ancestor::div[2]/preceding-sibling::h3[1]').text
+            ]
           end
         end
       end
