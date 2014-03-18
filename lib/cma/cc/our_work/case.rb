@@ -56,7 +56,7 @@ module CMA
 
             body_copy.make_relative_links_absolute!(CMA::OFT::BASE_URI)
 
-            markup_sections[markup_sections_key] = Kramdown::Document.new(
+            markup_sections["OFT/#{markup_sections_key}"] = Kramdown::Document.new(
               body_copy.inner_html.to_s,
               input: 'html'
             ).to_kramdown.gsub(/\{:.+?}/m, '')
