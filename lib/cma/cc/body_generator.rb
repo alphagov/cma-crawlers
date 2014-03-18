@@ -15,11 +15,12 @@ module CMA
       end
 
       def generate_body_for!(_case)
-        _case.body = '## Phase 2\n\n'
+        _case.body = "## Phase 2\n\n"
 
-        _case.body << "\nDate of referral:  #{reformat_date(_case.date_of_referral)}"
+        _case.body << "Date of referral:  #{reformat_date(_case.date_of_referral)}\n"
         _case.body <<
-          "\nStatutory deadline:  #{reformat_date(_case.statutory_deadline)}\n\n" if _case.statutory_deadline
+          "Statutory deadline:  #{reformat_date(_case.statutory_deadline)}\n" if _case.statutory_deadline
+        _case.body << "\n"
 
         append_single_sections(
           %w(
