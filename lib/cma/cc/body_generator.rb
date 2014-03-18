@@ -15,7 +15,7 @@ module CMA
       end
 
       def generate_body_for!(_case)
-        _case.body ||= '## Phase 2\n\n'
+        _case.body = '## Phase 2\n\n'
 
         append_single_sections(
           %w(
