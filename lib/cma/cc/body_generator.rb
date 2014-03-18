@@ -17,6 +17,9 @@ module CMA
       def generate_body_for!(_case)
         _case.body = '## Phase 2\n\n'
 
+        _case.body << "\nDate of referral:  #{reformat_date(_case.date_of_referral)}"
+        _case.body << "\nStatutory deadline:  #{reformat_date(_case.statutory_deadline)}\n\n"
+
         append_single_sections(
           %w(
             core_documents
@@ -91,9 +94,6 @@ module CMA
 
         if bodies.any?
           _case.body << "\n## Phase 1\n"
-
-          _case.body << "\nDate of referral:  #{reformat_date(_case.date_of_referral)}"
-          _case.body << "\nStatutory deadline:  #{reformat_date(_case.statutory_deadline)}\n\n"
 
           append_bodies(_case, bodies, header_offset: 2)
         end

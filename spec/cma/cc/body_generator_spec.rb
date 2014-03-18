@@ -34,10 +34,10 @@ describe CMA::CC::BodyGenerator do
       end
 
       it 'uses the date of referral' do
-        case_body.should have_content('Date of referral:  18/01/2012').under('## Phase 1')
+        case_body.should have_content('Date of referral:  18/01/2012').under('## Phase 2')
       end
       it 'uses the statutory deadline' do
-        case_body.should have_content('Statutory deadline:  17/01/2014').under('## Phase 1')
+        case_body.should have_content('Statutory deadline:  17/01/2014').under('## Phase 2')
       end
 
       it 'puts the CC headers at h3' do
