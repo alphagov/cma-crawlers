@@ -124,7 +124,7 @@ module CMA
 
         TITLES_TO_CASE_TYPES = {
           'Market investigations' => 'markets',
-          'Merger inquiries ' => 'mergers',
+          'Merger inquiries' => 'mergers',
           'Regulatory references and appeals' => 'regulatory-references-and-appeals',
           'Reviews of Orders and undertakings' => 'review-of-orders-and-undertakings',
         }

@@ -14,12 +14,22 @@ module CMA
 
           it { should have(17).cases }
 
+          it 'should not have any null case types' do
+            cases.each {|c| c.title.should_not be_nil }
+          end
+
           describe 'the first case' do
             subject { cases.first }
 
             its(:original_url) { should eql('http://www.competition-commission.org.uk/our-work/directory-of-all-inquiries/aggregates-cement-ready-mix-concrete') }
             its(:title)        { should eql('Aggregates, cement and ready-mix concrete') }
             its(:case_type)    { should eql('markets')}
+          end
+
+          describe 'Akzo' do
+            subject { cases.to_a[6] }
+
+            its(:case_type) { should eql('mergers') }
           end
 
           describe 'the last case' do
