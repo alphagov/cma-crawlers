@@ -81,6 +81,36 @@ describe CMA::CC::BodyGenerator do
 
       describe 'the absence of tables' do
         it { should_not include('<table') }
+        it { should_not include('<html') }
+        it { should_not include('<body') }
+
+CEMENT_CUSTOMER_SWITCHING = %Q{
+* [Cement customer switching (PDF, 613
+  Kb)](http://www.competition-commission.org.uk/assets/competitioncommission/docs/2012/aggregates-cement-and-ready-mix-concrete/cement_switching_slides_for_publication_non_con.pdf)
+  08.02.13
+}
+
+        it { should include(CEMENT_CUSTOMER_SWITCHING)}
+
+ANALYSIS_OF_COST_STRUCTURES = %q{Analysis of cost structures and profit margins
+  * [Part I: Purpose, approach and methodology (PDF, 170
+    Kb)](http://www.competition-commission.org.uk/assets/competitioncommission/docs/2012/aggregates-cement-and-ready-mix-concrete/analysis_of_cost_structures_and_profit_margins_part_1_excised.pdf)
+  * [Part II: Assessment covering the Majors’ relevant GB operations
+    (PDF, 501
+    Kb)](http://www.competition-commission.org.uk/assets/competitioncommission/docs/2012/aggregates-cement-and-ready-mix-concrete/analysis_of_cost_structures_and_profit_margins_part_2_excised.pdf)
+  * [Part III: Assessment covering the medium-tier independents’
+    relevant GB operations (PDF, 251
+    Kb)](http://www.competition-commission.org.uk/assets/competitioncommission/docs/2012/aggregates-cement-and-ready-mix-concrete/analysis_of_cost_structures_and_profit_margins_part_3_excised.pdf)
+  * [Glossary (PDF, 44
+    Kb)](http://www.competition-commission.org.uk/assets/competitioncommission/docs/2012/aggregates-cement-and-ready-mix-concrete/analysis_of_cost_structures_and_profit_margins_glossary.pdf)
+} + "  " + %q{
+  27\.03.13
+}
+        it "should convert nested lists" do
+          converted_nested_list = subject.split(/^\* /).find {|p| p.include?("Analysis of cost structures and profit margins")}
+          expect(converted_nested_list).to_not be_nil
+          expect(converted_nested_list).to eq(ANALYSIS_OF_COST_STRUCTURES)
+        end
       end
     end
   end

@@ -89,21 +89,13 @@ module CMA
           table.xpath('tbody/tr').each do |tr|
             tr.remove and next unless tr.xpath('td').any? # There are th's in tbody...
 
-            p_or_links     = tr.xpath('td[1]//p|td[1]//a')
-            date_published = tr.at_xpath('td[2]').try(:text)
+            li_inner_html = tr.xpath('.//td').map do |td|
+              inner_html_of_td(td)
+            end.join(" ")
 
-            next unless p_or_links.any?
-
-            p_or_links.each do |link|
-              if link.name == 'a' && date_published
-                # \u00a0 == &nbsp;
-                link.content = link.text.sub(/\)(?:\s|\u00a0)+$/, ", #{date_published})")
-              end
-
-              Nokogiri::XML::Node.new('li', node.document).tap do |li|
-                li << link
-                li_nodes << li
-              end
+            Nokogiri::XML::Node.new('li', node.document).tap do |li|
+              li << Nokogiri::XML::DocumentFragment.new(node.document, li_inner_html)
+              li_nodes << li
             end
           end
 
@@ -115,10 +107,21 @@ module CMA
         end
       end
 
+      def inner_html_of_td(td_node)
+        td_node.children.map do |child|
+          if child.name == 'p'
+            child.inner_html
+          else
+            child.to_html
+          end
+        end.join(" ")
+      end
+
       def transformed_content(source, options)
         html = Nokogiri::HTML(Kramdown::Document.new(source, options).to_html)
         transform_tables_to_lists!(html)
-        Kramdown::Document.new(html.to_s, options.merge(input: :html)).to_kramdown
+        inner_body = html.xpath('.//body').inner_html.to_s
+        Kramdown::Document.new(inner_body, options.merge(input: :html)).to_kramdown
       end
 
       def reformat_date(value)
