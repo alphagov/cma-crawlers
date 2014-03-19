@@ -69,14 +69,16 @@ module CMA
             table.xpath('tbody/tr').each do |tr|
               tr.remove and next unless tr.xpath('td').any? # There are th's in tbody...
 
-              links          = tr.xpath('td[1]//a')
-              date_published = tr.at_xpath('td[2]').text
+              p_or_links     = tr.xpath('td[1]//p|td[1]//a')
+              date_published = tr.at_xpath('td[2]').try(:text)
 
-              next unless links.any?
+              next unless p_or_links.any?
 
-              links.each do |link|
-                # \u00a0 == &nbsp;
-                link.content = link.text.sub(/\)(?:\s|\u00a0)+$/, ", #{date_published})")
+              p_or_links.each do |link|
+                if link.name == 'a' && date_published
+                  # \u00a0 == &nbsp;
+                  link.content = link.text.sub(/\)(?:\s|\u00a0)+$/, ", #{date_published})")
+                end
 
                 Nokogiri::XML::Node.new('li', node.document).tap do |li|
                   li << link
