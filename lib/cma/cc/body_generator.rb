@@ -61,7 +61,7 @@ module CMA
 
           in_order_subsections.each do |section_name|
             _case.markup_sections[section_name].tap do |content|
-              _case.body << Kramdown::Document.new(content, header_offset: 1).to_kramdown
+              _case.body << transformed_content(content, header_offset: 1)
             end
           end
         end
@@ -69,11 +69,7 @@ module CMA
 
       def append_bodies(_case, bodies, options = { header_offset: 1 })
         bodies.each do |section_body|
-          Kramdown::Document.new(
-            section_body, header_offset: options[:header_offset]
-          ).tap do |tree|
-            _case.body << tree.to_kramdown
-          end
+          _case.body << transformed_content(section_body, options)
         end
       end
 
@@ -83,6 +79,47 @@ module CMA
         append_bodies(_case, bodies)
       end
 
+      def transform_tables_to_lists!(node)
+        tables = node.xpath('.//table')
+        return node unless tables.length > 0
+
+        li_nodes = []
+
+        tables.each do |table|
+          table.xpath('tbody/tr').each do |tr|
+            tr.remove and next unless tr.xpath('td').any? # There are th's in tbody...
+
+            p_or_links     = tr.xpath('td[1]//p|td[1]//a')
+            date_published = tr.at_xpath('td[2]').try(:text)
+
+            next unless p_or_links.any?
+
+            p_or_links.each do |link|
+              if link.name == 'a' && date_published
+                # \u00a0 == &nbsp;
+                link.content = link.text.sub(/\)(?:\s|\u00a0)+$/, ", #{date_published})")
+              end
+
+              Nokogiri::XML::Node.new('li', node.document).tap do |li|
+                li << link
+                li_nodes << li
+              end
+            end
+          end
+
+          Nokogiri::XML::Node.new('ul', node.document).tap do |replacement_list|
+            li_nodes.each { |li| replacement_list << li }
+            table.add_next_sibling(replacement_list)
+            table.remove
+          end
+        end
+      end
+
+      def transformed_content(source, options)
+        html = Nokogiri::HTML(Kramdown::Document.new(source, options).to_html)
+        transform_tables_to_lists!(html)
+        Kramdown::Document.new(html.to_s, options.merge(input: :html)).to_kramdown
+      end
 
       def reformat_date(value)
         Date.strptime(value, '%Y-%m-%d').strftime('%d/%m/%Y')

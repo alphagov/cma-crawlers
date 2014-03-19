@@ -78,6 +78,10 @@ describe CMA::CC::BodyGenerator do
           '### Summary of work'
         end
       end
+
+      describe 'the absence of tables' do
+        it { should_not include('<table') }
+      end
     end
   end
 
