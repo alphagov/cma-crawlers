@@ -66,6 +66,21 @@ module CMA
                 should have_content('Ofcom Business Connectivity').under('## Background information')
               end
             end
+
+            describe 'the transformation of tables to lists' do
+              let(:doc) { Nokogiri::HTML(File.read('spec/fixtures/cc/aggregates-analysis-working-papers-tables.html')) }
+              before    { _case.add_markdown_detail(doc, 'analysis/working-papers') }
+
+              subject(:markdown) { _case.markup_sections['analysis/working-papers'] }
+
+              it { should_not include('<table')}
+              it { should have_content(
+                            'Aggregates price-concentration analysis and entry and exit analysis:'
+                          ).under '## Working papers'
+              }
+              it { should include('(PDF, 440 Kb,') }
+              it { should include('11.01.13)') }
+            end
           end
 
           context 'adding a part of a content bucket URL like .../evidence or .../analysis' do

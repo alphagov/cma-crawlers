@@ -59,6 +59,40 @@ module CMA
           end
         end
 
+        def transform_tables_to_lists!(node)
+          tables = node.xpath('.//table')
+          return node unless tables.length > 0
+
+          li_nodes = []
+
+          tables.each do |table|
+            table.xpath('tbody/tr').each do |tr|
+              tr.remove and next unless tr.xpath('td').any? # There are th's in tbody...
+
+              links          = tr.xpath('td[1]//a')
+              date_published = tr.at_xpath('td[2]').text
+
+              next unless links.any?
+
+              links.each do |link|
+                # \u00a0 == &nbsp;
+                link.content = link.text.sub(/\)(?:\s|\u00a0)+$/, ", #{date_published})")
+
+                Nokogiri::XML::Node.new('li', node.document).tap do |li|
+                  li << link
+                  li_nodes << li
+                end
+              end
+            end
+
+            Nokogiri::XML::Node.new('ul', node.document).tap do |replacement_list|
+              li_nodes.each { |li| replacement_list << li }
+              table.add_next_sibling(replacement_list)
+              table.remove
+            end
+          end
+        end
+
         def add_markdown_detail(doc, markup_sections_path, options = {url: :unknown})
           doc.dup.at_css('#mainColumn').tap do |markup|
             # Simple stuff
@@ -69,6 +103,8 @@ module CMA
             markup.css('li p.MsoNormal span a').each do |link|
               link.parent = link.at_xpath('ancestor::li')
             end
+
+            transform_tables_to_lists!(markup)
 
             # Stuff CSS can't handle, and stuff Kramdown can't either
             %w(
@@ -81,10 +117,6 @@ module CMA
               //a/@rel
               //@class
               //@style
-              //table/@*
-              //table//th/@valign
-              //table//td/@valign
-              //table//thead
               //comment()
             ).each do |superfluous_nodes|
               markup.xpath(superfluous_nodes).each(&:unlink)
